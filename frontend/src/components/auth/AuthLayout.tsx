@@ -9,6 +9,12 @@ export function AuthLayout() {
 
   return (
     <div className="grid min-h-svh bg-paper lg:grid-cols-[0.86fr_1.14fr]">
+      <a
+        href="#auth-main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:border focus:border-line focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
+      >
+        Skip to content
+      </a>
       <aside className="sticky top-0 hidden h-svh flex-col justify-between overflow-hidden bg-mint p-10 lg:flex xl:p-16">
         <Link to="/" aria-label="AmazeCare home" className="w-fit">
           <Logo />
@@ -48,7 +54,7 @@ export function AuthLayout() {
         </div>
       </aside>
 
-      <main className="flex min-h-svh flex-col">
+      <main id="auth-main" tabIndex={-1} className="flex min-h-svh flex-col">
         <header className="flex items-center justify-between gap-4 p-4 sm:p-6 lg:px-12">
           <Link
             to="/"

@@ -247,6 +247,12 @@ export function AppShell({ role }: { role: Role }) {
 
   return (
     <div className="min-h-svh bg-paper lg:flex">
+      <a
+        href="#workspace-main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:border focus:border-line focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
+      >
+        Skip to content
+      </a>
       <aside className="hidden lg:sticky lg:top-0 lg:flex lg:h-svh lg:w-64 lg:shrink-0 lg:flex-col lg:border-r lg:border-line lg:bg-surface">
         <div className="flex h-16 items-center border-b border-line px-4">
           <Link to={roleHome[role]} aria-label="AmazeCare workspace">
@@ -335,7 +341,11 @@ export function AppShell({ role }: { role: Role }) {
           </div>
         </header>
 
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main
+          id="workspace-main"
+          tabIndex={-1}
+          className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
+        >
           <div className="mx-auto w-full max-w-6xl">
             <Outlet />
           </div>
