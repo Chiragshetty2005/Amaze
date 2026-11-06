@@ -10,7 +10,7 @@ import { PageHeader } from '../../components/ui/PageHeader'
 import { SearchInput } from '../../components/ui/SearchInput'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Avatar } from '../../components/ui/Avatar'
-import { Button, buttonStyles } from '../../components/ui/Button'
+import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import {
   SelectField,

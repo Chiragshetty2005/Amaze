@@ -3,8 +3,8 @@ import {
   ArrowRight,
   CalendarBlank,
   ChartBar,
+  Pill,
   Plus,
-  Receipt,
   Stethoscope,
   Users,
   WarningCircle,
@@ -404,7 +404,7 @@ export function AdminDashboard() {
                 to="/admin/catalog"
                 className="flex items-center gap-3 rounded-lg border border-line px-3 py-2.5 transition-colors hover:bg-paper"
               >
-                <Receipt className="h-4 w-4 text-primary" aria-hidden="true" />
+                <Pill className="h-4 w-4 text-primary" aria-hidden="true" />
                 <span className="flex-1 body-6 text-ink">Manage catalog</span>
                 <ArrowRight className="h-3.5 w-3.5 text-muted" aria-hidden="true" />
               </Link>
@@ -444,8 +444,8 @@ export function AdminDashboard() {
               </div>
             </dl>
             <p className="mt-3 border-t border-line pt-3 caption-5 text-muted">
-              Week starting {formatDateShort(weekDays[0])}. Next month view is on
-              the reports page.
+              Seven day view from {formatDateShort(weekDays[0])}. The reports
+              page looks across 7, 30, or 90 days.
             </p>
           </section>
         </aside>

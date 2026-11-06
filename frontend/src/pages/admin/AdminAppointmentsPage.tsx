@@ -34,7 +34,7 @@ import {
   getAvailableSlotsForDoctor,
   getNextAvailableSlot,
 } from '../../lib/slots'
-import type { Appointment, AppointmentStatus } from '../../types'
+import type { Appointment } from '../../types'
 
 type TabValue = 'requests' | 'upcoming' | 'all' | 'completed' | 'cancelled'
 

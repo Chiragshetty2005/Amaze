@@ -12,6 +12,7 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { ResetPasswordPage } from './pages/ResetPasswordPage'
+import { PrivacyPage, TermsPage } from './pages/LegalPage'
 import { AppShell } from './components/app/AppShell'
 import { RequireRole } from './components/app/RequireRole'
 import { PatientDashboard } from './pages/patient/PatientDashboard'
@@ -31,6 +32,18 @@ import { DoctorConsultationPage } from './pages/doctor/DoctorConsultationPage'
 import { DoctorPatientsPage } from './pages/doctor/DoctorPatientsPage'
 import { DoctorPatientDetailPage } from './pages/doctor/DoctorPatientDetailPage'
 import { DoctorProfilePage } from './pages/doctor/DoctorProfilePage'
+import { AdminDashboard } from './pages/admin/AdminDashboard'
+import { AdminAppointmentsPage } from './pages/admin/AdminAppointmentsPage'
+import { AdminAppointmentDetailPage } from './pages/admin/AdminAppointmentDetailPage'
+import { AdminDoctorsPage } from './pages/admin/AdminDoctorsPage'
+import { AdminDoctorEditorPage } from './pages/admin/AdminDoctorEditorPage'
+import { AdminPatientsPage } from './pages/admin/AdminPatientsPage'
+import { AdminSpecializationsPage } from './pages/admin/AdminSpecializationsPage'
+import { AdminCatalogPage } from './pages/admin/AdminCatalogPage'
+import { AdminInvoicesPage } from './pages/admin/AdminInvoicesPage'
+import { AdminInvoiceDetailPage } from './pages/admin/AdminInvoiceDetailPage'
+import { AdminReportsPage } from './pages/admin/AdminReportsPage'
+import { AdminProfilePage } from './pages/admin/AdminProfilePage'
 import { buttonStyles } from './components/ui/Button'
 import { useDocumentMeta } from './hooks/useDocumentMeta'
 
@@ -76,6 +89,8 @@ export default function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/find-a-doctor" element={<FindDoctorPage />} />
               <Route path="/doctors/:id" element={<PublicDoctorProfilePage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
 
@@ -137,6 +152,42 @@ export default function App() {
                   element={<DoctorPatientDetailPage />}
                 />
                 <Route path="/doctor/profile" element={<DoctorProfilePage />} />
+              </Route>
+            </Route>
+
+            <Route element={<RequireRole role="admin" />}>
+              <Route element={<AppShell role="admin" />}>
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route
+                  path="/admin/appointments"
+                  element={<AdminAppointmentsPage />}
+                />
+                <Route
+                  path="/admin/appointments/:id"
+                  element={<AdminAppointmentDetailPage />}
+                />
+                <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
+                <Route
+                  path="/admin/doctors/new"
+                  element={<AdminDoctorEditorPage />}
+                />
+                <Route
+                  path="/admin/doctors/:id/edit"
+                  element={<AdminDoctorEditorPage />}
+                />
+                <Route path="/admin/patients" element={<AdminPatientsPage />} />
+                <Route
+                  path="/admin/specializations"
+                  element={<AdminSpecializationsPage />}
+                />
+                <Route path="/admin/catalog" element={<AdminCatalogPage />} />
+                <Route path="/admin/invoices" element={<AdminInvoicesPage />} />
+                <Route
+                  path="/admin/invoices/:id"
+                  element={<AdminInvoiceDetailPage />}
+                />
+                <Route path="/admin/reports" element={<AdminReportsPage />} />
+                <Route path="/admin/profile" element={<AdminProfilePage />} />
               </Route>
             </Route>
           </Routes>
