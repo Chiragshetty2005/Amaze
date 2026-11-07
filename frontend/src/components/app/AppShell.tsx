@@ -27,6 +27,7 @@ import {
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { useAuth } from '../../contexts/AuthContext'
+import { useScrollRevealScope } from '../../hooks/useScrollRevealScope'
 import { roleHome } from '../../lib/auth'
 import type { Role } from '../../types'
 import { Logo } from '../brand/Logo'
@@ -227,6 +228,9 @@ export function AppShell({ role }: { role: Role }) {
   const location = useLocation()
   const [navOpen, setNavOpen] = useState(false)
   const navTriggerRef = useRef<HTMLButtonElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useScrollRevealScope(contentRef)
 
   useEffect(() => {
     setNavOpen(false)
@@ -354,7 +358,7 @@ export function AppShell({ role }: { role: Role }) {
           tabIndex={-1}
           className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
         >
-          <div className="mx-auto w-full max-w-6xl">
+          <div ref={contentRef} className="mx-auto w-full max-w-6xl">
             <Outlet />
           </div>
         </main>

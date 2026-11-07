@@ -64,7 +64,7 @@ function DoctorRow({
   nextSlot: AvailableSlot | null
 }) {
   return (
-    <li className="border-t border-line first:border-t-0">
+    <li data-scroll-card className="border-t border-line first:border-t-0">
       <div className="flex flex-col gap-4 p-4 transition-colors duration-300 ease-out-expo hover:bg-paper/70 sm:p-6 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex min-w-0 items-center gap-4 lg:w-[38%]">
           <Avatar name={doctor.name} size="lg" />

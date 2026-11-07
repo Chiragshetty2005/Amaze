@@ -1,8 +1,15 @@
-import { Outlet } from 'react-router-dom'
+import { useRef } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { useScrollRevealScope } from '../../hooks/useScrollRevealScope'
 import { SiteHeader } from '../landing/SiteHeader'
 import { Footer } from '../landing/Footer'
 
 export function PublicLayout() {
+  const mainRef = useRef<HTMLElement>(null)
+  const { pathname } = useLocation()
+
+  useScrollRevealScope(mainRef, pathname !== '/')
+
   return (
     <div className="flex min-h-svh flex-col">
       <a
@@ -12,7 +19,7 @@ export function PublicLayout() {
         Skip to content
       </a>
       <SiteHeader />
-      <main id="main" tabIndex={-1} className="flex-1">
+      <main ref={mainRef} id="main" tabIndex={-1} className="flex-1">
         <Outlet />
       </main>
       <Footer />

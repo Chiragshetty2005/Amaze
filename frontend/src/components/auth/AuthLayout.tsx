@@ -1,11 +1,16 @@
+import { useRef } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Logo } from '../brand/Logo'
 import { testimonials } from '../../mocks/data'
+import { useScrollRevealScope } from '../../hooks/useScrollRevealScope'
 import { cn } from '../../lib/cn'
 
 export function AuthLayout() {
   const location = useLocation()
+  const contentRef = useRef<HTMLDivElement>(null)
   const isWide = location.pathname === '/register'
+
+  useScrollRevealScope(contentRef)
 
   return (
     <div className="grid min-h-svh bg-paper lg:grid-cols-[0.86fr_1.14fr]">
@@ -72,7 +77,10 @@ export function AuthLayout() {
         </header>
 
         <div className="flex flex-1 items-start justify-center px-4 pb-12 pt-2 sm:px-6 lg:items-center lg:px-12 lg:pb-16 lg:pt-0">
-          <div className={cn('w-full', isWide ? 'max-w-xl' : 'max-w-md')}>
+          <div
+            ref={contentRef}
+            className={cn('w-full', isWide ? 'max-w-xl' : 'max-w-md')}
+          >
             <Outlet />
           </div>
         </div>

@@ -4,7 +4,7 @@
   --color-paper: #f5f8f6;
   --color-surface: #ffffff;
   --color-ink: #10201c;
-  --color-muted: #5c6f69;
+  --color-muted: #5a6c66;
   --color-line: #d8e4df;
   --color-mint: #ddefe7;
   --color-primary: #0b6b57;
@@ -638,6 +638,37 @@
     transform: translateY(0);
   }
 
+  [data-scroll-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 0.875rem, 0);
+  }
+
+  [data-scroll-reveal][data-scroll-reveal-visible],
+  [data-scroll-reveal]:focus-within {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  [data-scroll-reveal][data-scroll-reveal-visible] {
+    animation-name: scroll-reveal-in;
+    animation-duration: 520ms;
+    animation-timing-function: var(--ease-out-expo);
+    animation-delay: var(--scroll-reveal-delay, 0ms);
+    animation-fill-mode: both;
+  }
+
+  [data-scroll-reveal]:focus-within {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-scroll-reveal] {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
   .skeleton {
     border-radius: 0.5rem;
     background-color: color-mix(in srgb, var(--color-line) 55%, transparent);
@@ -764,6 +795,17 @@
   }
 }
 
+@keyframes scroll-reveal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.875rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media print {
   @page {
     margin: 12mm;
@@ -782,6 +824,12 @@
   .invoice-print,
   .invoice-print * {
     visibility: visible;
+  }
+
+  [data-scroll-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 
   .invoice-print {
