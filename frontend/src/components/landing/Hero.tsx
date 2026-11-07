@@ -29,9 +29,9 @@ const boardRows = [
 
 function ClinicBoard() {
   return (
-    <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+    <div className="relative mx-auto w-full min-w-0 max-w-md sm:max-w-lg lg:max-w-none">
       <div className="slip bg-mint shadow-slip">
-        <div className="slip-inner flex flex-col gap-4">
+        <div className="slip-inner flex flex-col gap-4 p-4 sm:p-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col gap-1">
               <p className="caption-4 text-muted">This week at AmazeCare</p>
@@ -50,7 +50,7 @@ function ClinicBoard() {
             {boardRows.map((row, index) => (
               <li
                 key={`${row.doctor}-${row.time}`}
-                className="board-row flex items-center gap-3 border-t border-line p-3 first:border-t-0"
+                className="board-row grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2 border-t border-line p-3 first:border-t-0 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto]"
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 <div className="w-20 shrink-0">
@@ -59,14 +59,21 @@ function ClinicBoard() {
                     {formatTime(row.time)}
                   </p>
                 </div>
-                <Avatar name={row.doctor} size="sm" />
-                <div className="min-w-0 flex-1">
+                <Avatar
+                  name={row.doctor}
+                  size="sm"
+                  className="hidden sm:inline-flex"
+                />
+                <div className="min-w-0">
                   <p className="title-4 truncate text-ink">{row.doctor}</p>
                   <p className="caption-5 truncate text-muted">
                     {row.department}
                   </p>
                 </div>
-                <StatusChip status="confirmed" />
+                <StatusChip
+                  status="confirmed"
+                  className="col-span-2 justify-self-end sm:col-span-1 sm:col-start-4 sm:row-start-1 sm:justify-self-auto"
+                />
               </li>
             ))}
           </ul>
@@ -99,9 +106,30 @@ function ClinicBoard() {
 
 export function Hero() {
   return (
-    <section id="hero" className="overflow-hidden pb-12 pt-20 lg:pb-16 lg:pt-24">
-      <div className="container-page grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        <div className="flex flex-col items-start gap-6">
+    <section
+      id="hero"
+      className="relative isolate overflow-hidden bg-paper bg-[url('/landing-poster.jpg')] bg-cover bg-center pb-12 pt-20 lg:pb-16 lg:pt-24"
+    >
+      <video
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+        src="/LandingPage.mp4"
+        poster="/landing-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        tabIndex={-1}
+        disablePictureInPicture
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-paper/75 lg:bg-paper/55"
+      />
+
+      <div className="container-page relative grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="flex min-w-0 flex-col items-start gap-6">
           <h1 className="heading-display hero-heading max-w-hero">
             See the right specialist,
             <span className="block">without the wait.</span>

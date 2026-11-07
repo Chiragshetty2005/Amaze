@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Link,
   NavLink,
@@ -226,6 +226,7 @@ export function AppShell({ role }: { role: Role }) {
   const navigate = useNavigate()
   const location = useLocation()
   const [navOpen, setNavOpen] = useState(false)
+  const navTriggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     setNavOpen(false)
@@ -285,6 +286,7 @@ export function AppShell({ role }: { role: Role }) {
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-line bg-paper/90 px-4 backdrop-blur sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 lg:hidden">
             <button
+              ref={navTriggerRef}
               type="button"
               onClick={() => setNavOpen(true)}
               className="icon-btn text-muted hover:bg-mint hover:text-ink"
@@ -363,6 +365,10 @@ export function AppShell({ role }: { role: Role }) {
           <Dialog.Overlay className="dialog-overlay fixed inset-0 z-50 bg-ink/40 lg:hidden" />
           <Dialog.Content
             id="workspace-navigation"
+            onCloseAutoFocus={(event) => {
+              event.preventDefault()
+              navTriggerRef.current?.focus()
+            }}
             className="dialog-mobile fixed inset-y-0 left-0 z-50 flex w-[calc(100%-3rem)] max-w-xs flex-col bg-surface shadow-slip focus:outline-none lg:hidden"
           >
             <Dialog.Title className="sr-only">Navigation</Dialog.Title>

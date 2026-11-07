@@ -206,7 +206,7 @@ export function AdminPatientsPage() {
                 <th scope="col">Contact</th>
                 <th scope="col">Visits</th>
                 <th scope="col">Next visit</th>
-                <th scope="col"><span className="sr-only">Actions</span></th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>

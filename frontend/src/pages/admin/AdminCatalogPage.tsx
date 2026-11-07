@@ -278,7 +278,7 @@ export function AdminCatalogPage() {
                 <th scope="col">Form</th>
                 <th scope="col">Strength</th>
                 <th scope="col">Prescribed</th>
-                <th scope="col"><span className="sr-only">Actions</span></th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -342,7 +342,7 @@ export function AdminCatalogPage() {
                 <th scope="col">Test</th>
                 <th scope="col">Price</th>
                 <th scope="col">Ordered</th>
-                <th scope="col"><span className="sr-only">Actions</span></th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AmazeCare.Api/AmazeCare.Api.csproj" />
+    <Project Path="src/AmazeCare.Application/AmazeCare.Application.csproj" />
+    <Project Path="src/AmazeCare.Domain/AmazeCare.Domain.csproj" />
+    <Project Path="src/AmazeCare.Infrastructure/AmazeCare.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AmazeCare.UnitTests/AmazeCare.UnitTests.csproj" />
+  </Folder>
+</Solution>

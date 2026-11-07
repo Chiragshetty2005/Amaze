@@ -122,7 +122,7 @@ export function DoctorPatientsPage() {
                 <th scope="col">Visits</th>
                 <th scope="col">Last visit</th>
                 <th scope="col">Next visit</th>
-                <th scope="col"><span className="sr-only">Action</span></th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>

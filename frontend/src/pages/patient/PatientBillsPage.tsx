@@ -98,7 +98,7 @@ export function PatientBillsPage() {
                 <th scope="col">Doctor</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
-                <th scope="col"><span className="sr-only">Action</span></th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>

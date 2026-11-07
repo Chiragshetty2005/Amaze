@@ -66,7 +66,7 @@ export function LoginPage() {
     toast.success(result.message)
   }
 
-  const useDemo = (account: (typeof demoAccounts)[number]) => {
+  const signInWithDemo = (account: (typeof demoAccounts)[number]) => {
     clearErrors('root')
     setValue('email', account.email)
     setValue('password', account.password)
@@ -178,7 +178,7 @@ export function LoginPage() {
             <button
               key={account.role}
               type="button"
-              onClick={() => useDemo(account)}
+              onClick={() => signInWithDemo(account)}
               className={buttonStyles({ variant: 'secondary', size: 'sm' })}
             >
               {account.label} demo

@@ -1,0 +1,6 @@
+@AmazeCare.Api_HostAddress = http://localhost:5250
+
+GET {{AmazeCare.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

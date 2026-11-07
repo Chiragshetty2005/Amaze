@@ -136,7 +136,7 @@ export function AdminDoctorsPage() {
                 <th scope="col">Clinic days</th>
                 <th scope="col">Experience</th>
                 <th scope="col">Fee</th>
-                <th scope="col"><span className="sr-only">Actions</span></th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
