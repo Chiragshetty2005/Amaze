@@ -17,6 +17,7 @@ import {
   TextAreaField,
   TextField,
 } from '../../components/ui/Form'
+import { apiErrorMessage } from '../../lib/api'
 import { getAge, pluralize } from '../../lib/format'
 import { formatDateShort, todayISO } from '../../lib/date'
 import { getUpcomingAppointments } from '../../lib/selectors'

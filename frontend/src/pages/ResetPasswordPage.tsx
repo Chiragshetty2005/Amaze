@@ -116,14 +116,17 @@ export function ResetPasswordPage() {
 
   const onSubmit = async (values: ResetValues) => {
     clearErrors('root')
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    const result = resetPassword(values.email, values.password)
+    if (!token) {
+      setError('root', { message: 'This reset link is not valid.' })
+      return
+    }
+    const result = await resetPassword(values.email, token, values.password)
     if (!result.ok) {
       setError('root', { message: result.message })
       return
     }
     setResetEmail(values.email)
-    toast.success('Password updated. Sign in with the new password.')
+    toast.success(result.message)
     setDone(true)
   }
 

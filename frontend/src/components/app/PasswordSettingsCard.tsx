@@ -49,9 +49,12 @@ export function PasswordSettingsCard() {
 
   const newPassword = watch('newPassword')
 
-  const onSubmit = (values: PasswordValues) => {
+  const onSubmit = async (values: PasswordValues) => {
     setPasswordError('')
-    const result = changePassword(values.currentPassword, values.newPassword)
+    const result = await changePassword(
+      values.currentPassword,
+      values.newPassword,
+    )
     if (!result.ok) {
       setPasswordError(result.message)
       return

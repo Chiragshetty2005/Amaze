@@ -39,7 +39,7 @@ import {
   getDosageLabel,
 } from '../../lib/format'
 import { getInvoiceTotals } from '../../lib/invoice'
-import { getAvailableSlotsForDoctor, getNextAvailableSlot } from '../../lib/slots'
+import { apiErrorMessage } from '../../lib/api'
 import { isActiveAppointment } from '../../lib/selectors'
 
 export function PatientAppointmentDetailPage() {
@@ -79,9 +79,8 @@ export function PatientAppointmentDetailPage() {
 
   const dates = useMemo(() => getNextDays(14), [])
   const nextAvailable = useMemo(
-    () =>
-      doctor ? getNextAvailableSlot(doctor, clinic.state.appointments) : null,
-    [doctor, clinic.state.appointments],
+    () => (doctor ? clinic.getNextAvailableSlot(doctor.id) : null),
+    [doctor, clinic],
   )
 
   const [rescheduleOpen, setRescheduleOpen] = useState(
@@ -104,29 +103,17 @@ export function PatientAppointmentDetailPage() {
     const set = new Set<string>()
     if (!doctor) return set
     dates.forEach((date) => {
-      if (
-        getAvailableSlotsForDoctor(
-          doctor,
-          date,
-          clinic.state.appointments,
-        ).length > 0
-      ) {
+      if (clinic.getAvailableSlotsForDoctor(doctor.id, date).length > 0) {
         set.add(date)
       }
     })
     return set
-  }, [doctor, dates, clinic.state.appointments])
+  }, [doctor, dates, clinic])
 
   const rescheduleSlots = useMemo(
     () =>
-      doctor
-        ? getAvailableSlotsForDoctor(
-            doctor,
-            rescheduleDate,
-            clinic.state.appointments,
-          )
-        : [],
-    [doctor, rescheduleDate, clinic.state.appointments],
+      doctor ? clinic.getAvailableSlotsForDoctor(doctor.id, rescheduleDate) : [],
+    [doctor, rescheduleDate, clinic],
   )
 
   if (!appointment || !doctor || !patient) {
@@ -146,29 +133,39 @@ export function PatientAppointmentDetailPage() {
 
   const active = isActiveAppointment(appointment)
 
-  const confirmReschedule = () => {
+  const confirmReschedule = async () => {
     if (!rescheduleTime) return
-    clinic.rescheduleAppointment(
-      appointment.id,
-      rescheduleDate,
-      rescheduleTime,
-      'patient',
-    )
-    setRescheduleOpen(false)
-    setRescheduleTime('')
-    toast.success('Appointment rescheduled. The new slot is pending confirmation.')
+    try {
+      await clinic.rescheduleAppointment(
+        appointment.id,
+        rescheduleDate,
+        rescheduleTime,
+        'patient',
+      )
+      setRescheduleOpen(false)
+      setRescheduleTime('')
+      toast.success(
+        'Appointment rescheduled. The new slot is pending confirmation.',
+      )
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
-  const confirmCancel = () => {
+  const confirmCancel = async () => {
     if (cancelReason.trim().length < 3) {
       setCancelError('Add a short reason so the clinic understands.')
       return
     }
-    clinic.cancelAppointment(appointment.id, cancelReason.trim())
-    setCancelOpen(false)
-    setCancelReason('')
-    setCancelError('')
-    toast.success('Appointment cancelled.')
+    try {
+      await clinic.cancelAppointment(appointment.id, cancelReason.trim())
+      setCancelOpen(false)
+      setCancelReason('')
+      setCancelError('')
+      toast.success('Appointment cancelled.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (

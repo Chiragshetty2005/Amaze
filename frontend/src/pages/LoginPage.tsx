@@ -37,6 +37,7 @@ export function LoginPage() {
   const emailParam = searchParams.get('email') ?? ''
   const registered = searchParams.get('registered') === '1'
   const [showPassword, setShowPassword] = useState(false)
+  const [demoBusy, setDemoBusy] = useState(false)
 
   const {
     register,
@@ -56,9 +57,9 @@ export function LoginPage() {
     }
   }, [user, redirect, navigate])
 
-  const onSubmit = (values: LoginValues) => {
+  const onSubmit = async (values: LoginValues) => {
     clearErrors('root')
-    const result = login(values.email, values.password)
+    const result = await login(values.email, values.password)
     if (!result.ok) {
       setError('root', { message: result.message })
       return
@@ -66,11 +67,13 @@ export function LoginPage() {
     toast.success(result.message)
   }
 
-  const signInWithDemo = (account: (typeof demoAccounts)[number]) => {
+  const signInWithDemo = async (account: (typeof demoAccounts)[number]) => {
     clearErrors('root')
     setValue('email', account.email)
     setValue('password', account.password)
-    const result = login(account.email, account.password)
+    setDemoBusy(true)
+    const result = await login(account.email, account.password)
+    setDemoBusy(false)
     if (!result.ok) {
       setError('root', { message: result.message })
       return
@@ -178,7 +181,8 @@ export function LoginPage() {
             <button
               key={account.role}
               type="button"
-              onClick={() => signInWithDemo(account)}
+              onClick={() => void signInWithDemo(account)}
+              disabled={demoBusy || isSubmitting}
               className={buttonStyles({ variant: 'secondary', size: 'sm' })}
             >
               {account.label} demo
@@ -186,7 +190,7 @@ export function LoginPage() {
           ))}
         </div>
         <p className="mt-3 caption-5 text-muted">
-          One click signs you in. No real patient data is stored.
+          One click signs you in to the seeded clinic accounts.
         </p>
       </div>
     </div>

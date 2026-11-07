@@ -69,12 +69,15 @@ export function AdminProfilePage() {
   }
 
   const onSave = async (values: ProfileValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 300))
-    updateProfile({
+    const result = await updateProfile({
       name: values.name,
       phone: values.phone,
       photoUrl,
     })
+    if (!result.ok) {
+      toast.error(result.message)
+      return
+    }
     toast.success('Profile updated.')
   }
 
@@ -138,7 +141,7 @@ export function AdminProfilePage() {
             <h2 className="title-1 text-ink">Sign in</h2>
             <p className="mt-2 body-6 break-all text-ink">{user.email}</p>
             <p className="mt-1 caption-5 text-muted">
-              Administrator account. Email changes are not enabled in this demo.
+              Administrator account. Email changes are managed on the server.
             </p>
           </div>
         </aside>
@@ -185,7 +188,7 @@ export function AdminProfilePage() {
                 value={user.email}
                 disabled
                 containerClassName="sm:col-span-2"
-                hint="Sign in email cannot be changed in this demo."
+                hint="Email changes are managed on the server."
               />
             </div>
 

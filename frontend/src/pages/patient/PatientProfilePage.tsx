@@ -14,6 +14,7 @@ import { Button } from '../../components/ui/Button'
 import { FileUpload } from '../../components/ui/FileUpload'
 import { TextField } from '../../components/ui/Form'
 import { PasswordSettingsCard } from '../../components/app/PasswordSettingsCard'
+import { apiErrorMessage } from '../../lib/api'
 import { getAge } from '../../lib/format'
 import { formatDateLong } from '../../lib/date'
 
@@ -77,14 +78,25 @@ export function PatientProfilePage() {
   }
 
   const onSaveProfile = async (values: ProfileValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 300))
-    updateProfile({
-      name: values.name,
-      phone: values.phone,
-      photoUrl,
-    })
-    clinic.updatePatient(patient.id, { address: values.address })
-    toast.success('Profile updated.')
+    try {
+      await clinic.updatePatient(patient.id, {
+        name: values.name,
+        phone: values.phone,
+        address: values.address,
+      })
+      const result = await updateProfile({
+        name: values.name,
+        phone: values.phone,
+        photoUrl,
+      })
+      if (!result.ok) {
+        toast.error(result.message)
+        return
+      }
+      toast.success('Profile updated.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (
@@ -188,7 +200,7 @@ export function PatientProfilePage() {
                 type="email"
                 value={patient.email}
                 disabled
-                hint="Email cannot be changed in this demo."
+                hint="Contact the clinic to change your sign-in email."
               />
               <div className="flex flex-col gap-2">
                 <span className="label">Date of birth</span>

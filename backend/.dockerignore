@@ -1,0 +1,11 @@
+bin/
+obj/
+logs/
+*.user
+*.suo
+.vs/
+TestResults/
+coverage/
+*.db
+*.db-shm
+*.db-wal

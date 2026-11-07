@@ -1,0 +1,27 @@
+# Operating system
+.DS_Store
+Thumbs.db
+
+# .NET build output
+**/bin/
+**/obj/
+backend/logs/
+TestResults/
+coverage/
+
+# Frontend build output
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Editors
+.vscode/
+.idea/
+*.user
+*.suo
+*.swp

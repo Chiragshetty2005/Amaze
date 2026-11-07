@@ -21,6 +21,7 @@ import { FileUpload } from '../../components/ui/FileUpload'
 import { TextAreaField, TextField } from '../../components/ui/Form'
 import { PasswordSettingsCard } from '../../components/app/PasswordSettingsCard'
 import { formatAvailabilitySummary } from '../../lib/availability'
+import { apiErrorMessage } from '../../lib/api'
 import { formatCurrency } from '../../lib/format'
 import { formatTime } from '../../lib/date'
 
@@ -110,22 +111,29 @@ export function DoctorProfilePage() {
   }
 
   const onSave = async (values: ProfileValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 350))
-    updateProfile({
-      name: values.name,
-      phone: values.phone,
-      photoUrl,
-    })
-    clinic.updateDoctor(doctor.id, {
-      name: values.name,
-      phone: values.phone,
-      photoUrl,
-      qualification: values.qualification,
-      designation: values.designation,
-      fee: Number(values.fee),
-      bio: values.bio.trim(),
-    })
-    toast.success('Profile updated.')
+    try {
+      await clinic.updateDoctor(doctor.id, {
+        name: values.name,
+        phone: values.phone,
+        photoUrl,
+        qualification: values.qualification,
+        designation: values.designation,
+        fee: Number(values.fee),
+        bio: values.bio.trim(),
+      })
+      const result = await updateProfile({
+        name: values.name,
+        phone: values.phone,
+        photoUrl,
+      })
+      if (!result.ok) {
+        toast.error(result.message)
+        return
+      }
+      toast.success('Profile updated.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   const sortedAvailability = doctor.availability
@@ -264,7 +272,7 @@ export function DoctorProfilePage() {
                 type="email"
                 value={doctor.email}
                 disabled
-                hint="Sign in email cannot be changed in this demo."
+                hint="Contact the administrator to change your sign-in email."
               />
               <TextField
                 label="Consultation fee (INR)"

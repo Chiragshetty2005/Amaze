@@ -244,8 +244,8 @@ export function AppShell({ role }: { role: Role }) {
     month: 'long',
   }).format(new Date())
 
-  const signOut = () => {
-    logout()
+  const signOut = async () => {
+    await logout()
     toast('Signed out.')
     navigate('/')
   }
@@ -277,7 +277,7 @@ export function AppShell({ role }: { role: Role }) {
           <UserCard role={role} />
           <button
             type="button"
-            onClick={signOut}
+            onClick={() => void signOut()}
             className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 caption-4 text-muted transition-colors duration-300 ease-out-expo hover:bg-paper hover:text-ink"
           >
             <SignOut className="h-4 w-4" aria-hidden="true" />
@@ -403,7 +403,7 @@ export function AppShell({ role }: { role: Role }) {
               <UserCard role={role} />
               <button
                 type="button"
-                onClick={signOut}
+                onClick={() => void signOut()}
                 className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 caption-4 text-muted transition-colors duration-300 ease-out-expo hover:bg-paper hover:text-ink"
               >
                 <SignOut className="h-4 w-4" aria-hidden="true" />

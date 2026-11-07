@@ -30,10 +30,7 @@ import {
   todayISO,
 } from '../../lib/date'
 import { getPastAppointments, getUpcomingAppointments } from '../../lib/selectors'
-import {
-  getAvailableSlotsForDoctor,
-  getNextAvailableSlot,
-} from '../../lib/slots'
+import { apiErrorMessage } from '../../lib/api'
 import type { Appointment } from '../../types'
 
 type TabValue = 'requests' | 'upcoming' | 'all' | 'completed' | 'cancelled'
@@ -63,6 +60,15 @@ function AdminAppointmentRow({ appointment }: { appointment: Appointment }) {
     ? clinic.getSpecialization(doctor.specializationId)
     : undefined
   if (!patient || !doctor) return null
+
+  const confirm = async () => {
+    try {
+      await clinic.confirmAppointment(appointment.id)
+      toast.success('Appointment confirmed.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
+  }
 
   return (
     <li className="border-t border-line first:border-t-0">
@@ -105,10 +111,7 @@ function AdminAppointmentRow({ appointment }: { appointment: Appointment }) {
               <Button
                 type="button"
                 size="sm"
-                onClick={() => {
-                  clinic.confirmAppointment(appointment.id)
-                  toast.success('Appointment confirmed.')
-                }}
+                onClick={() => void confirm()}
               >
                 Confirm
               </Button>
@@ -236,29 +239,19 @@ export function AdminAppointmentsPage() {
     const set = new Set<string>()
     if (!selectedDoctor) return set
     dates.forEach((item) => {
-      if (
-        getAvailableSlotsForDoctor(
-          selectedDoctor,
-          item,
-          clinic.state.appointments,
-        ).length > 0
-      ) {
+      if (clinic.getAvailableSlotsForDoctor(selectedDoctor.id, item).length > 0) {
         set.add(item)
       }
     })
     return set
-  }, [selectedDoctor, dates, clinic.state.appointments])
+  }, [selectedDoctor, dates, clinic])
 
   const slots = useMemo(
     () =>
       selectedDoctor
-        ? getAvailableSlotsForDoctor(
-            selectedDoctor,
-            date,
-            clinic.state.appointments,
-          )
+        ? clinic.getAvailableSlotsForDoctor(selectedDoctor.id, date)
         : [],
-    [selectedDoctor, date, clinic.state.appointments],
+    [selectedDoctor, date, clinic],
   )
 
   const openBooking = () => {
@@ -289,9 +282,7 @@ export function AdminAppointmentsPage() {
   const onDoctorChange = (value: string) => {
     setDoctorId(value)
     const doctor = value ? clinic.getDoctor(value) : undefined
-    const next = doctor
-      ? getNextAvailableSlot(doctor, clinic.state.appointments)
-      : null
+    const next = doctor ? clinic.getNextAvailableSlot(doctor.id) : null
     setDate(next?.date ?? dates[0])
     setTime(next?.time ?? '')
     setErrors((current) => ({
@@ -317,19 +308,23 @@ export function AdminAppointmentsPage() {
     if (Object.keys(nextErrors).length > 0) return
 
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 400))
-    clinic.createAppointment({
-      patientId,
-      doctorId,
-      date,
-      time,
-      symptoms: symptoms.trim(),
-      natureOfVisit,
-    })
-    setIsSubmitting(false)
-    setBookingOpen(false)
-    setTab('requests')
-    toast.success('Appointment request created.')
+    try {
+      await clinic.createAppointment({
+        patientId,
+        doctorId,
+        date,
+        time,
+        symptoms: symptoms.trim(),
+        natureOfVisit,
+      })
+      setBookingOpen(false)
+      setTab('requests')
+      toast.success('Appointment request created.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

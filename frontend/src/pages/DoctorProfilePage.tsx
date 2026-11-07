@@ -14,11 +14,7 @@ import { Button, buttonStyles } from '../components/ui/Button'
 import { EmptyState } from '../components/ui/EmptyState'
 import { SlotPicker } from '../components/ui/SlotPicker'
 import { formatCurrency } from '../lib/format'
-import {
-  formatNextSlot,
-  getAvailableSlotsForDoctor,
-  getNextAvailableSlot,
-} from '../lib/slots'
+import { formatNextSlot } from '../lib/slots'
 import { getNextDays } from '../lib/date'
 import { getAreasOfCare, clinicAddress } from '../lib/specialtyDetails'
 
@@ -36,7 +32,7 @@ export function DoctorProfilePage() {
     : undefined
 
   const nextAvailable = doctor
-    ? getNextAvailableSlot(doctor, clinic.state.appointments)
+    ? clinic.getNextAvailableSlot(doctor.id)
     : null
   const defaultDate = nextAvailable?.date ?? getNextDays(1)[0]
 
@@ -48,18 +44,12 @@ export function DoctorProfilePage() {
     const set = new Set<string>()
     if (!doctor) return set
     dates.forEach((date) => {
-      if (
-        getAvailableSlotsForDoctor(
-          doctor,
-          date,
-          clinic.state.appointments,
-        ).length > 0
-      ) {
+      if (clinic.getAvailableSlotsForDoctor(doctor.id, date).length > 0) {
         set.add(date)
       }
     })
     return set
-  }, [doctor, dates, clinic.state.appointments])
+  }, [doctor, dates, clinic])
 
   useEffect(() => {
     setSelectedTime('')
@@ -92,11 +82,7 @@ export function DoctorProfilePage() {
     )
   }
 
-  const slots = getAvailableSlotsForDoctor(
-    doctor,
-    selectedDate,
-    clinic.state.appointments,
-  )
+  const slots = clinic.getAvailableSlotsForDoctor(doctor.id, selectedDate)
   const areas = getAreasOfCare(doctor.specializationId)
   const relatedDoctors = clinic.state.doctors
     .filter(
@@ -253,10 +239,7 @@ export function DoctorProfilePage() {
                 </h2>
                 <ul className="overflow-hidden rounded-2xl border border-line bg-surface">
                   {relatedDoctors.map((related) => {
-                    const relatedSlot = getNextAvailableSlot(
-                      related,
-                      clinic.state.appointments,
-                    )
+                    const relatedSlot = clinic.getNextAvailableSlot(related.id)
                     return (
                       <li
                         key={related.id}

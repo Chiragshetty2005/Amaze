@@ -80,9 +80,9 @@ function NotFoundPage() {
 
 export default function App() {
   return (
-    <ClinicProvider>
+    <BrowserRouter>
       <AuthProvider>
-        <BrowserRouter>
+        <ClinicProvider>
           <ScrollToTop />
           <Routes>
             <Route element={<PublicLayout />}>
@@ -192,8 +192,8 @@ export default function App() {
             </Route>
           </Routes>
           <Toaster />
-        </BrowserRouter>
+        </ClinicProvider>
       </AuthProvider>
-    </ClinicProvider>
+    </BrowserRouter>
   )
 }

@@ -1,6 +1,60 @@
 @AmazeCare.Api_HostAddress = http://localhost:5250
+@accessToken = paste-access-token-here
+@doctorId = paste-doctor-id-here
+@patientId = paste-patient-id-here
+@appointmentId = paste-appointment-id-here
+@invoiceId = paste-invoice-id-here
 
-GET {{AmazeCare.Api_HostAddress}}/weatherforecast/
+GET {{AmazeCare.Api_HostAddress}}/health
 Accept: application/json
 
 ###
+
+POST {{AmazeCare.Api_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "patient@amazecare.test",
+  "password": "Patient@123"
+}
+
+###
+
+GET {{AmazeCare.Api_HostAddress}}/api/v1/doctors?page=1&pageSize=20
+Accept: application/json
+
+###
+
+GET {{AmazeCare.Api_HostAddress}}/api/v1/specializations
+Accept: application/json
+
+###
+
+GET {{AmazeCare.Api_HostAddress}}/api/v1/doctors/{{doctorId}}/slots?days=14
+Accept: application/json
+
+###
+
+GET {{AmazeCare.Api_HostAddress}}/api/v1/appointments
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+###
+
+POST {{AmazeCare.Api_HostAddress}}/api/v1/appointments
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "doctorId": "{{doctorId}}",
+  "date": "2026-11-12",
+  "time": "10:00",
+  "symptoms": "Persistent headache for three days.",
+  "natureOfVisit": "New consultation"
+}
+
+###
+
+GET {{AmazeCare.Api_HostAddress}}/api/v1/invoices/{{invoiceId}}/pdf
+Authorization: Bearer {{accessToken}}
+Accept: application/pdf

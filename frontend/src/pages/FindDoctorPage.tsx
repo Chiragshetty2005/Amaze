@@ -9,7 +9,7 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { buttonStyles } from '../components/ui/Button'
 import { SpecialtyIcon } from '../components/landing/SpecialtyIcon'
 import { formatCurrency, pluralize } from '../lib/format'
-import { getNextAvailableSlot, type AvailableSlot } from '../lib/slots'
+import type { AvailableSlot } from '../lib/slots'
 import { formatTime, relativeDayLabel } from '../lib/date'
 import { cn } from '../lib/cn'
 import type { Doctor } from '../types'
@@ -146,13 +146,10 @@ export function FindDoctorPage() {
   const nextSlots = useMemo(() => {
     const map = new Map<string, AvailableSlot | null>()
     clinic.state.doctors.forEach((doctor) => {
-      map.set(
-        doctor.id,
-        getNextAvailableSlot(doctor, clinic.state.appointments),
-      )
+      map.set(doctor.id, clinic.getNextAvailableSlot(doctor.id))
     })
     return map
-  }, [clinic.state.doctors, clinic.state.appointments])
+  }, [clinic])
 
   const filteredDoctors = useMemo(() => {
     const normalized = query.trim().toLowerCase()

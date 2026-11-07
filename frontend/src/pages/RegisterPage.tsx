@@ -119,8 +119,7 @@ export function RegisterPage() {
 
   const onSubmit = async (values: RegisterValues) => {
     clearErrors('root')
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    const result = registerPatient({
+    const result = await registerPatient({
       name: values.name,
       email: values.email,
       phone: values.phone,

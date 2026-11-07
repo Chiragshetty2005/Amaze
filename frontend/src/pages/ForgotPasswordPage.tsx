@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { EnvelopeSimple } from '@phosphor-icons/react'
+import { EnvelopeSimple, WarningCircle } from '@phosphor-icons/react'
+import { useAuth } from '../contexts/AuthContext'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { Button } from '../components/ui/Button'
 import { TextField } from '../components/ui/Form'
@@ -25,10 +26,13 @@ export function ForgotPasswordPage() {
     robots: 'noindex,nofollow',
   })
 
+  const { requestPasswordReset } = useAuth()
   const [sentTo, setSentTo] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<ForgotValues>({
     resolver: zodResolver(forgotSchema),
@@ -36,7 +40,12 @@ export function ForgotPasswordPage() {
   })
 
   const onSubmit = async (values: ForgotValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 350))
+    clearErrors('root')
+    const result = await requestPasswordReset(values.email)
+    if (!result.ok) {
+      setError('root', { message: result.message })
+      return
+    }
     setSentTo(values.email)
   }
 
@@ -77,17 +86,6 @@ export function ForgotPasswordPage() {
           </Link>
         </div>
 
-        <div className="border-t border-line pt-4">
-          <p className="caption-5 text-muted">Demo shortcut</p>
-          <Link
-            to={`/reset-password?token=demo-reset-token&email=${encodeURIComponent(
-              sentTo,
-            )}`}
-            className="link mt-1 inline-flex text-sm"
-          >
-            Open the password reset link
-          </Link>
-        </div>
       </div>
     )
   }
@@ -102,6 +100,19 @@ export function ForgotPasswordPage() {
           password.
         </p>
       </div>
+
+      {errors.root ? (
+        <div
+          className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/5 p-3 body-6 text-danger"
+          role="alert"
+        >
+          <WarningCircle
+            className="mt-0.5 h-4 w-4 shrink-0"
+            aria-hidden="true"
+          />
+          <span>{errors.root.message}</span>
+        </div>
+      ) : null}
 
       <form
         className="flex flex-col gap-4"

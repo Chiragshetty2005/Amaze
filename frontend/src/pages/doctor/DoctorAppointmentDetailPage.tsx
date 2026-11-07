@@ -35,7 +35,7 @@ import {
 } from '../../lib/date'
 import { formatCurrency, getAge, getDosageLabel } from '../../lib/format'
 import { getInvoiceTotals } from '../../lib/invoice'
-import { getAvailableSlotsForDoctor, getNextAvailableSlot } from '../../lib/slots'
+import { apiErrorMessage } from '../../lib/api'
 import { isActiveAppointment } from '../../lib/selectors'
 
 type ReasonMode = 'reject' | 'cancel'
@@ -71,8 +71,8 @@ export function DoctorAppointmentDetailPage() {
 
   const dates = useMemo(() => getNextDays(14), [])
   const nextAvailable = useMemo(
-    () => (doctor ? getNextAvailableSlot(doctor, clinic.state.appointments) : null),
-    [doctor, clinic.state.appointments],
+    () => (doctor ? clinic.getNextAvailableSlot(doctor.id) : null),
+    [doctor, clinic],
   )
 
   const [rescheduleOpen, setRescheduleOpen] = useState(false)
@@ -93,26 +93,17 @@ export function DoctorAppointmentDetailPage() {
     const set = new Set<string>()
     if (!doctor) return set
     dates.forEach((date) => {
-      if (
-        getAvailableSlotsForDoctor(doctor, date, clinic.state.appointments).length >
-        0
-      ) {
+      if (clinic.getAvailableSlotsForDoctor(doctor.id, date).length > 0) {
         set.add(date)
       }
     })
     return set
-  }, [doctor, dates, clinic.state.appointments])
+  }, [doctor, dates, clinic])
 
   const rescheduleSlots = useMemo(
     () =>
-      doctor
-        ? getAvailableSlotsForDoctor(
-            doctor,
-            rescheduleDate,
-            clinic.state.appointments,
-          )
-        : [],
-    [doctor, rescheduleDate, clinic.state.appointments],
+      doctor ? clinic.getAvailableSlotsForDoctor(doctor.id, rescheduleDate) : [],
+    [doctor, rescheduleDate, clinic],
   )
 
   if (!doctor || !appointment || !patient) {
@@ -157,35 +148,52 @@ export function DoctorAppointmentDetailPage() {
     setReasonMode(mode)
   }
 
-  const confirmReason = () => {
+  const confirmAppointment = async () => {
+    try {
+      await clinic.confirmAppointment(appointment.id)
+      toast.success('Appointment confirmed.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
+  }
+
+  const confirmReason = async () => {
     if (!reasonMode) return
     if (reason.trim().length < 3) {
       setReasonError('Add a short reason so the patient understands.')
       return
     }
-    if (reasonMode === 'reject') {
-      clinic.rejectAppointment(appointment.id, reason.trim())
-      toast.success('Appointment rejected. The patient can book another slot.')
-    } else {
-      clinic.cancelAppointment(appointment.id, reason.trim())
-      toast.success('Appointment cancelled.')
+    try {
+      if (reasonMode === 'reject') {
+        await clinic.rejectAppointment(appointment.id, reason.trim())
+        toast.success('Appointment rejected. The patient can book another slot.')
+      } else {
+        await clinic.cancelAppointment(appointment.id, reason.trim())
+        toast.success('Appointment cancelled.')
+      }
+      setReasonMode(null)
+      setReason('')
+      setReasonError('')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    setReasonMode(null)
-    setReason('')
-    setReasonError('')
   }
 
-  const confirmReschedule = () => {
+  const confirmReschedule = async () => {
     if (!rescheduleTime) return
-    clinic.rescheduleAppointment(
-      appointment.id,
-      rescheduleDate,
-      rescheduleTime,
-      'doctor',
-    )
-    setRescheduleOpen(false)
-    setRescheduleTime('')
-    toast.success('Appointment moved and confirmed.')
+    try {
+      await clinic.rescheduleAppointment(
+        appointment.id,
+        rescheduleDate,
+        rescheduleTime,
+        'doctor',
+      )
+      setRescheduleOpen(false)
+      setRescheduleTime('')
+      toast.success('Appointment moved and confirmed.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (
@@ -397,10 +405,7 @@ export function DoctorAppointmentDetailPage() {
                   <>
                     <Button
                       type="button"
-                      onClick={() => {
-                        clinic.confirmAppointment(appointment.id)
-                        toast.success('Appointment confirmed.')
-                      }}
+                      onClick={() => void confirmAppointment()}
                     >
                       Confirm appointment
                     </Button>

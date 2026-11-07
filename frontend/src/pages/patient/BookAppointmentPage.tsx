@@ -24,7 +24,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Button, buttonStyles } from '../../components/ui/Button'
 import { SlotPicker } from '../../components/ui/SlotPicker'
 import { TextAreaField, SelectField } from '../../components/ui/Form'
-import { getAvailableSlotsForDoctor } from '../../lib/slots'
+import { apiErrorMessage } from '../../lib/api'
 import { formatCurrency, getAge } from '../../lib/format'
 import {
   formatDateLong,
@@ -69,15 +69,11 @@ export function BookAppointmentPage() {
   const nextAvailable = useMemo(() => {
     if (!doctor) return null
     for (const date of dates) {
-      const slots = getAvailableSlotsForDoctor(
-        doctor,
-        date,
-        clinic.state.appointments,
-      )
+      const slots = clinic.getAvailableSlotsForDoctor(doctor.id, date)
       if (slots.length > 0) return { date, time: slots[0] }
     }
     return null
-  }, [doctor, dates, clinic.state.appointments])
+  }, [doctor, dates, clinic])
 
   const dateParam = searchParams.get('date')
   const timeParam = searchParams.get('time')
@@ -100,29 +96,17 @@ export function BookAppointmentPage() {
     const set = new Set<string>()
     if (!doctor) return set
     dates.forEach((date) => {
-      if (
-        getAvailableSlotsForDoctor(
-          doctor,
-          date,
-          clinic.state.appointments,
-        ).length > 0
-      ) {
+      if (clinic.getAvailableSlotsForDoctor(doctor.id, date).length > 0) {
         set.add(date)
       }
     })
     return set
-  }, [doctor, dates, clinic.state.appointments])
+  }, [doctor, dates, clinic])
 
   const slots = useMemo(
     () =>
-      doctor
-        ? getAvailableSlotsForDoctor(
-            doctor,
-            selectedDate,
-            clinic.state.appointments,
-          )
-        : [],
-    [doctor, selectedDate, clinic.state.appointments],
+      doctor ? clinic.getAvailableSlotsForDoctor(doctor.id, selectedDate) : [],
+    [doctor, selectedDate, clinic],
   )
 
   const {
@@ -164,17 +148,20 @@ export function BookAppointmentPage() {
       setStep(1)
       return
     }
-    await new Promise((resolve) => setTimeout(resolve, 350))
-    const appointment = clinic.createAppointment({
-      patientId: patient.id,
-      doctorId: doctor.id,
-      date: selectedDate,
-      time: selectedTime,
-      symptoms: values.symptoms,
-      natureOfVisit: values.natureOfVisit,
-    })
-    toast.success('Appointment requested. Your doctor will confirm shortly.')
-    navigate(`/patient/appointments/${appointment.id}`, { replace: true })
+    try {
+      const appointment = await clinic.createAppointment({
+        patientId: patient.id,
+        doctorId: doctor.id,
+        date: selectedDate,
+        time: selectedTime,
+        symptoms: values.symptoms,
+        natureOfVisit: values.natureOfVisit,
+      })
+      toast.success('Appointment requested. Your doctor will confirm shortly.')
+      navigate(`/patient/appointments/${appointment.id}`, { replace: true })
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (
