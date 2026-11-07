@@ -253,7 +253,10 @@ export function AppShell({ role }: { role: Role }) {
       >
         Skip to content
       </a>
-      <aside className="hidden lg:sticky lg:top-0 lg:flex lg:h-svh lg:w-64 lg:shrink-0 lg:flex-col lg:border-r lg:border-line lg:bg-surface">
+      <aside
+        aria-label="Workspace sidebar"
+        className="hidden lg:sticky lg:top-0 lg:flex lg:h-svh lg:w-64 lg:shrink-0 lg:flex-col lg:border-r lg:border-line lg:bg-surface"
+      >
         <div className="flex h-16 items-center border-b border-line px-4">
           <Link to={roleHome[role]} aria-label="AmazeCare workspace">
             <Logo />
@@ -286,6 +289,9 @@ export function AppShell({ role }: { role: Role }) {
               onClick={() => setNavOpen(true)}
               className="icon-btn text-muted hover:bg-mint hover:text-ink"
               aria-label="Open navigation"
+              aria-haspopup="dialog"
+              aria-expanded={navOpen}
+              aria-controls="workspace-navigation"
             >
               <List className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -355,7 +361,10 @@ export function AppShell({ role }: { role: Role }) {
       <Dialog.Root open={navOpen} onOpenChange={setNavOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="dialog-overlay fixed inset-0 z-50 bg-ink/40 lg:hidden" />
-          <Dialog.Content className="dialog-mobile fixed inset-y-0 left-0 z-50 flex w-[calc(100%-3rem)] max-w-xs flex-col bg-surface shadow-slip focus:outline-none lg:hidden">
+          <Dialog.Content
+            id="workspace-navigation"
+            className="dialog-mobile fixed inset-y-0 left-0 z-50 flex w-[calc(100%-3rem)] max-w-xs flex-col bg-surface shadow-slip focus:outline-none lg:hidden"
+          >
             <Dialog.Title className="sr-only">Navigation</Dialog.Title>
             <div className="flex h-16 items-center justify-between border-b border-line px-4">
               <Link

@@ -95,10 +95,10 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-ink/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="caption-5 text-ink/60">
+          <p className="caption-5 text-ink/70">
             © 2026 AmazeCare. All rights reserved.
           </p>
-          <p className="caption-5 text-ink/60">
+          <p className="caption-5 text-ink/70">
             Internship demo. Do not enter real medical data.
           </p>
         </div>

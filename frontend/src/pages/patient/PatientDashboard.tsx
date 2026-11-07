@@ -131,7 +131,7 @@ export function PatientDashboard() {
           <div className="grid sm:grid-cols-[1fr_200px]">
             <div className="flex flex-col gap-5 p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-3">
-                <p className="caption-4 text-ink/60">Next appointment</p>
+                <p className="caption-4 text-ink/70">Next appointment</p>
                 <StatusChip status={next.status} />
               </div>
 
@@ -142,7 +142,7 @@ export function PatientDashboard() {
                   <p className="body-5 text-ink/70">
                     {nextSpecialization?.name ?? nextDoctor.designation}
                   </p>
-                  <p className="mt-1 caption-5 text-ink/60">
+                  <p className="mt-1 caption-5 text-ink/70">
                     {next.natureOfVisit}
                   </p>
                 </div>
@@ -167,7 +167,7 @@ export function PatientDashboard() {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-1 border-t border-dashed border-primary/25 bg-surface/60 p-5 sm:border-l sm:border-t-0">
-              <p className="caption-4 text-ink/60">
+              <p className="caption-4 text-ink/70">
                 {formatWeekday(next.date)}
               </p>
               <p className="heading-2 text-ink">{formatDayNumber(next.date)}</p>
@@ -177,7 +177,7 @@ export function PatientDashboard() {
               <p className="mt-2 font-mono text-lg font-medium text-ink">
                 {formatTime(next.time)}
               </p>
-              <p className="mt-3 caption-5 text-center text-ink/60">
+              <p className="mt-3 caption-5 text-center text-ink/70">
                 AmazeCare, Indiranagar
               </p>
             </div>
@@ -206,7 +206,7 @@ export function PatientDashboard() {
       </dl>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="flex flex-col gap-8 lg:col-span-2">
+        <div className="flex min-w-0 flex-col gap-8 lg:col-span-2">
           <section className="flex flex-col gap-4">
             <div className="flex items-end justify-between gap-4">
               <div className="flex flex-col gap-1">
@@ -351,7 +351,7 @@ export function PatientDashboard() {
           </section>
         </div>
 
-        <aside className="flex flex-col gap-5">
+        <aside className="flex min-w-0 flex-col gap-5">
           <div className="card-flat flex flex-col gap-3">
             <p className="title-1 text-ink">Need care sooner?</p>
             <p className="body-6 text-ink/70">

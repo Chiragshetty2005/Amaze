@@ -89,7 +89,7 @@ export function PatientRecordsPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by diagnosis, doctor, or symptom"
+          placeholder="Search diagnosis or doctor"
           ariaLabel="Search medical records"
           className="sm:max-w-md"
         />

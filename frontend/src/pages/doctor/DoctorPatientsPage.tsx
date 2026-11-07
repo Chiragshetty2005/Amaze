@@ -88,7 +88,7 @@ export function DoctorPatientsPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by name, email, or phone"
+          placeholder="Search name or phone"
           ariaLabel="Search patients"
           className="sm:max-w-md"
         />
@@ -108,7 +108,12 @@ export function DoctorPatientsPage() {
           }
         />
       ) : (
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Patients"
+          tabIndex={0}
+        >
           <table className="table min-w-[820px]">
             <thead>
               <tr>
@@ -117,9 +122,7 @@ export function DoctorPatientsPage() {
                 <th scope="col">Visits</th>
                 <th scope="col">Last visit</th>
                 <th scope="col">Next visit</th>
-                <th scope="col">
-                  <span className="sr-only">Action</span>
-                </th>
+                <th scope="col"><span className="sr-only">Action</span></th>
               </tr>
             </thead>
             <tbody>

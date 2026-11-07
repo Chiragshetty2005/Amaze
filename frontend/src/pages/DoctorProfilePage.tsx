@@ -122,7 +122,7 @@ export function DoctorProfilePage() {
         <div className="container-page">
           <nav
             aria-label="Breadcrumb"
-            className="flex flex-wrap items-center gap-2 caption-2 text-ink/60"
+            className="flex flex-wrap items-center gap-2 caption-2 text-ink/70"
           >
             <Link to="/" className="hover:text-ink">
               Home
@@ -150,20 +150,20 @@ export function DoctorProfilePage() {
                 <p className="title-2 text-ink/70">
                   {specialization?.name ?? 'General Medicine'}
                 </p>
-                <p className="body-6 text-ink/60">{doctor.qualification}</p>
-                <p className="body-6 text-ink/60">{doctor.designation}</p>
+                <p className="body-6 text-ink/70">{doctor.qualification}</p>
+                <p className="body-6 text-ink/70">{doctor.designation}</p>
               </div>
             </div>
 
             <dl className="flex flex-wrap gap-8">
               <div>
-                <dt className="caption-5 text-ink/60">Experience</dt>
+                <dt className="caption-5 text-ink/70">Experience</dt>
                 <dd className="title-1 text-ink">
                   {doctor.experienceYears} years
                 </dd>
               </div>
               <div>
-                <dt className="caption-5 text-ink/60">Consultation</dt>
+                <dt className="caption-5 text-ink/70">Consultation</dt>
                 <dd className="title-1 font-mono text-ink">
                   {formatCurrency(doctor.fee)}
                 </dd>
@@ -175,7 +175,7 @@ export function DoctorProfilePage() {
 
       <section className="section-pad bg-paper">
         <div className="container-page grid gap-10 lg:grid-cols-3 lg:gap-12">
-          <div className="order-2 flex flex-col gap-10 lg:order-1 lg:col-span-2">
+          <div className="order-2 min-w-0 flex flex-col gap-10 lg:order-1 lg:col-span-2">
             <section className="flex flex-col gap-3">
               <h2 className="heading-5 text-ink">About {doctor.name}</h2>
               <p className="max-w-2xl body-3 text-muted">{doctor.bio}</p>
@@ -295,7 +295,7 @@ export function DoctorProfilePage() {
             ) : null}
           </div>
 
-          <aside className="order-1 lg:order-2 lg:col-span-1 lg:sticky lg:top-24 lg:self-start">
+          <div className="order-1 min-w-0 lg:order-2 lg:col-span-1 lg:sticky lg:top-24 lg:self-start">
             <div className="card flex flex-col gap-5">
               <div className="flex flex-col gap-1">
                 <p className="caption-4 text-muted">Book a consultation</p>
@@ -361,7 +361,7 @@ export function DoctorProfilePage() {
               />
               For a medical emergency, call 112.
             </p>
-          </aside>
+          </div>
         </div>
       </section>
     </>

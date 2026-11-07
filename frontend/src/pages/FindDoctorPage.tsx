@@ -43,7 +43,7 @@ function DepartmentButton({
       <span
         className={cn(
           'caption-5',
-          active ? 'text-white/70' : 'text-muted',
+          active ? 'text-white/85' : 'text-muted',
         )}
       >
         {count}
@@ -210,7 +210,7 @@ export function FindDoctorPage() {
     <>
       <section className="bg-mint pb-8 pt-20 lg:pb-12 lg:pt-24">
         <div className="container-page flex flex-col gap-6">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 caption-2 text-ink/60">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 caption-2 text-ink/70">
             <Link to="/" className="hover:text-ink">
               Home
             </Link>
@@ -234,10 +234,10 @@ export function FindDoctorPage() {
             <SearchInput
               value={query}
               onChange={setQuery}
-              placeholder="Search by name, department, or qualification"
+              placeholder="Search by name or department"
               ariaLabel="Search doctors"
             />
-            <p className="caption-5 text-ink/60">
+            <p className="caption-5 text-ink/70">
               11 specialists across 8 departments.
             </p>
           </div>
@@ -246,7 +246,7 @@ export function FindDoctorPage() {
 
       <section className="section-pad bg-paper">
         <div className="container-page grid gap-8 lg:grid-cols-4 lg:gap-12">
-          <aside className="lg:col-span-1 lg:sticky lg:top-24 lg:self-start">
+          <div className="min-w-0 lg:col-span-1 lg:sticky lg:top-24 lg:self-start">
             <div className="flex items-center justify-between gap-3">
               <h2 className="title-2 text-ink">Departments</h2>
               {specialtyId !== 'all' || query ? (
@@ -297,9 +297,9 @@ export function FindDoctorPage() {
                 See General Medicine
               </button>
             </div>
-          </aside>
+          </div>
 
-          <div className="lg:col-span-3">
+          <div className="min-w-0 lg:col-span-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="body-5 text-muted" aria-live="polite">
                 {filteredDoctors.length}{' '}

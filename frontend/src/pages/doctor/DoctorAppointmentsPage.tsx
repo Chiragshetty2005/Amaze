@@ -197,7 +197,7 @@ export function DoctorAppointmentsPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by patient, symptom, or visit type"
+          placeholder="Search patient or visit type"
           ariaLabel="Search appointments"
           className="sm:max-w-md"
         />
@@ -211,7 +211,7 @@ export function DoctorAppointmentsPage() {
       </div>
 
       <Tabs defaultValue="requests">
-        <TabsList>
+        <TabsList ariaLabel="Appointment views">
           <TabsTrigger value="requests">
             Requests{' '}
             <span className="ml-1 caption-5 text-muted">

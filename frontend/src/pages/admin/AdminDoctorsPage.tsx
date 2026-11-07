@@ -73,7 +73,7 @@ export function AdminDoctorsPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by name, email, or department"
+          placeholder="Search name or department"
           ariaLabel="Search doctors"
           className="sm:max-w-md"
         />
@@ -122,7 +122,12 @@ export function AdminDoctorsPage() {
           }
         />
       ) : (
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Doctors"
+          tabIndex={0}
+        >
           <table className="table min-w-[940px]">
             <thead>
               <tr>
@@ -131,9 +136,7 @@ export function AdminDoctorsPage() {
                 <th scope="col">Clinic days</th>
                 <th scope="col">Experience</th>
                 <th scope="col">Fee</th>
-                <th scope="col">
-                  <span className="sr-only">Actions</span>
-                </th>
+                <th scope="col"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>

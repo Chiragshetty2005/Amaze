@@ -96,9 +96,9 @@ export function AdminProfilePage() {
             />
             <div>
               <p className="heading-5 text-ink">{user.name}</p>
-              <p className="caption-4 text-ink/60">Clinic administrator</p>
+              <p className="caption-4 text-ink/70">Clinic administrator</p>
             </div>
-            <p className="border-t border-primary/15 pt-3 caption-5 text-ink/60">
+            <p className="border-t border-primary/15 pt-3 caption-5 text-ink/70">
               Full access to schedules, records, catalog, billing, and reports.
             </p>
           </div>

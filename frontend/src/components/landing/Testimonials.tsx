@@ -22,7 +22,7 @@ export function Testimonials() {
               <Avatar name={featured.name} size="md" />
               <div>
                 <p className="title-4 text-ink">{featured.name}</p>
-                <p className="caption-5 text-ink/60">{featured.context}</p>
+                <p className="caption-5 text-ink/70">{featured.context}</p>
               </div>
             </figcaption>
           </figure>

@@ -105,16 +105,16 @@ export function PatientProfilePage() {
             />
             <div className="flex flex-col gap-1">
               <p className="heading-5 text-ink">{patient.name}</p>
-              <p className="caption-4 text-ink/60">Patient</p>
+              <p className="caption-4 text-ink/70">Patient</p>
             </div>
             <div className="flex w-full flex-col gap-1 border-t border-primary/15 pt-3">
-              <p className="caption-5 text-ink/60">
+              <p className="caption-5 text-ink/70">
                 Patient ID{' '}
                 <span className="font-mono text-ink">
                   {patient.id.toUpperCase()}
                 </span>
               </p>
-              <p className="caption-5 text-ink/60">
+              <p className="caption-5 text-ink/70">
                 {getAge(patient.dob)} years. {patient.gender}.
               </p>
             </div>

@@ -302,7 +302,7 @@ export function DoctorPatientDetailPage() {
         <aside className="flex flex-col gap-5">
           {next ? (
             <div className="card-flat">
-              <p className="caption-4 text-ink/60">Next appointment</p>
+              <p className="caption-4 text-ink/70">Next appointment</p>
               <p className="mt-2 heading-5 text-ink">
                 {formatDateShort(next.date)}
               </p>

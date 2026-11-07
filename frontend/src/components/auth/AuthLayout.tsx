@@ -22,7 +22,7 @@ export function AuthLayout() {
 
         <div className="flex max-w-lg flex-col gap-8">
           <div className="flex flex-col gap-4">
-            <p className="caption-3 text-ink/60">Patient access</p>
+            <p className="caption-3 text-ink/70">Patient access</p>
             <h1 className="heading-section text-ink">
               Care that fits around your day.
             </h1>
@@ -48,7 +48,7 @@ export function AuthLayout() {
           </figure>
         </div>
 
-        <div className="flex flex-col gap-1 caption-5 text-ink/60">
+        <div className="flex flex-col gap-1 caption-5 text-ink/70">
           <p>AmazeCare Clinic, Indiranagar, Bengaluru</p>
           <p>Hospital workflow demo. No real patient data.</p>
         </div>

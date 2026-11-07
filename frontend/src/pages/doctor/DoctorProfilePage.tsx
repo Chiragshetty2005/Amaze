@@ -150,15 +150,15 @@ export function DoctorProfilePage() {
             />
             <div className="flex flex-col gap-1">
               <p className="heading-5 text-ink">{doctor.name}</p>
-              <p className="caption-4 text-ink/60">
+              <p className="caption-4 text-ink/70">
                 {specialization?.name ?? doctor.designation}
               </p>
             </div>
             <div className="flex w-full flex-col gap-1 border-t border-primary/15 pt-3">
-              <p className="caption-5 text-ink/60">
+              <p className="caption-5 text-ink/70">
                 {doctor.experienceYears} years of experience
               </p>
-              <p className="caption-5 text-ink/60">
+              <p className="caption-5 text-ink/70">
                 Consultation fee{' '}
                 <span className="font-mono text-ink">
                   {formatCurrency(doctor.fee)}

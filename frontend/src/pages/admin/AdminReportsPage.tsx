@@ -228,30 +228,30 @@ export function AdminReportsPage() {
           <dd className="font-mono text-xl font-medium text-ink">
             {formatCurrency(billed)}
           </dd>
-          <p className="caption-5 text-muted">All invoices</p>
+          <dd className="caption-5 text-muted">All invoices</dd>
         </div>
         <div className="flex flex-col gap-1 bg-surface p-4">
           <dt className="caption-5 text-muted">Collected</dt>
           <dd className="font-mono text-xl font-medium text-primary">
             {formatCurrency(collected)}
           </dd>
-          <p className="caption-5 text-muted">
+          <dd className="caption-5 text-muted">
             {billed > 0 ? Math.round((collected / billed) * 100) : 0}% of billed
-          </p>
+          </dd>
         </div>
         <div className="flex flex-col gap-1 bg-surface p-4">
           <dt className="caption-5 text-muted">Outstanding</dt>
-          <dd className="font-mono text-xl font-medium text-coral">
+          <dd className="font-mono text-xl font-medium text-danger">
             {formatCurrency(outstanding)}
           </dd>
-          <p className="caption-5 text-muted">Awaiting payment</p>
+          <dd className="caption-5 text-muted">Awaiting payment</dd>
         </div>
         <div className="flex flex-col gap-1 bg-surface p-4">
           <dt className="caption-5 text-muted">Completed visits</dt>
           <dd className="heading-5 text-ink">{completedVisits.length}</dd>
-          <p className="caption-5 text-muted">
+          <dd className="caption-5 text-muted">
             Average {formatCurrency(averageInvoice)} per invoice
-          </p>
+          </dd>
         </div>
       </dl>
 
@@ -388,7 +388,12 @@ export function AdminReportsPage() {
         </div>
 
         {doctorStats.length > 0 ? (
-          <div className="table-wrap">
+          <div
+            className="table-wrap"
+            role="region"
+            aria-label="Doctor performance"
+            tabIndex={0}
+          >
             <table className="table min-w-[760px]">
               <thead>
                 <tr>

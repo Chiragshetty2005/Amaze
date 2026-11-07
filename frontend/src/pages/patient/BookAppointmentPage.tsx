@@ -195,7 +195,7 @@ export function BookAppointmentPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="min-w-0 flex flex-col gap-6 lg:col-span-2">
           <ol className="flex flex-wrap items-center gap-3">
             {[
               { number: 1, label: 'Choose a slot' },
@@ -334,7 +334,7 @@ export function BookAppointmentPage() {
           </section>
         </div>
 
-        <aside className="lg:col-span-1">
+        <aside className="min-w-0 lg:col-span-1">
           <div className="slip lg:sticky lg:top-24">
             <div className="slip-inner flex flex-col gap-5">
               <div className="flex flex-col gap-1">

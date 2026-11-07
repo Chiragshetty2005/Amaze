@@ -135,7 +135,7 @@ export function AdminDashboard() {
       <section className="overflow-hidden rounded-2xl border border-primary/20 bg-mint">
         <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1fr_340px] lg:items-center">
           <div className="flex flex-col gap-3">
-            <p className="caption-4 text-ink/60">The week ahead</p>
+            <p className="caption-4 text-ink/70">The week ahead</p>
             <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
               <p className="heading-1 text-ink">{weekVisits.length}</p>
               <p className="pb-1 title-2 text-ink/75">
@@ -151,14 +151,14 @@ export function AdminDashboard() {
             <div className="flex flex-wrap items-center gap-4 pt-1">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-                <span className="caption-5 text-ink/60">
+                <span className="caption-5 text-ink/70">
                   {nextClinicDate
                     ? `Next clinic day ${formatDateShort(nextClinicDate)}`
                     : 'No clinic day booked'}
                 </span>
               </div>
               {nextClinicDate ? (
-                <span className="caption-5 text-ink/60">
+                <span className="caption-5 text-ink/70">
                   {nextClinicCount} {pluralize(nextClinicCount, 'visit')}
                 </span>
               ) : null}
@@ -180,7 +180,7 @@ export function AdminDashboard() {
               const height = count === 0 ? 6 : 18 + (count / maxDayCount) * 56
               return (
                 <div key={date} className="flex flex-col items-center gap-1.5">
-                  <span className="caption-5 text-ink/50">
+                  <span className="caption-5 text-ink/70">
                     {formatWeekday(date)}
                   </span>
                   <span className="font-mono text-xs font-medium text-ink">
@@ -196,7 +196,7 @@ export function AdminDashboard() {
                       style={{ height: `${height}px` }}
                     />
                   </div>
-                  <span className="font-mono text-[10px] text-ink/60">
+                  <span className="font-mono text-[10px] text-ink/70">
                     {count}
                   </span>
                 </div>
@@ -210,8 +210,12 @@ export function AdminDashboard() {
         {stats.map((stat) => (
           <div key={stat.label} className="flex flex-col gap-1 bg-surface p-4">
             <dt className="caption-5 text-muted">{stat.label}</dt>
-            <dd className="heading-5 text-ink">{stat.value}</dd>
-            <p className="caption-5 text-muted">{stat.hint}</p>
+            <dd className="heading-5 text-ink">
+              {stat.value}
+              <span className="mt-1 block font-sans caption-5 font-normal text-muted">
+                {stat.hint}
+              </span>
+            </dd>
           </div>
         ))}
       </dl>
@@ -300,7 +304,7 @@ export function AdminDashboard() {
                 </div>
                 <div className="text-right">
                   <p className="caption-5 text-muted">Outstanding</p>
-                  <p className="font-mono text-xl font-medium text-coral">
+                  <p className="font-mono text-xl font-medium text-danger">
                     {formatCurrency(outstanding)}
                   </p>
                 </div>
@@ -327,7 +331,7 @@ export function AdminDashboard() {
           <section className="rounded-2xl border border-line bg-surface p-5">
             <div className="flex items-center gap-2">
               <WarningCircle
-                className="h-5 w-5 text-coral"
+                className="h-5 w-5 text-danger"
                 aria-hidden="true"
               />
               <h2 className="title-1 text-ink">Needs attention</h2>

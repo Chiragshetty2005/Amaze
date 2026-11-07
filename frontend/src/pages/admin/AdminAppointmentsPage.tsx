@@ -354,7 +354,7 @@ export function AdminAppointmentsPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by patient, doctor, or symptom"
+          placeholder="Search patient or doctor"
           ariaLabel="Search appointments"
           className="sm:max-w-md"
         />
@@ -367,8 +367,12 @@ export function AdminAppointmentsPage() {
         </p>
       </div>
 
-      <Tabs value={tab} onValueChange={(value) => setTab(value as TabValue)}>
-        <TabsList>
+      <Tabs
+        value={tab}
+        onValueChange={(value) => setTab(value as TabValue)}
+        mode="filter"
+      >
+        <TabsList ariaLabel="Filter appointments">
           {tabs.map((item) => (
             <TabsTrigger key={item.value} value={item.value}>
               {item.label}{' '}

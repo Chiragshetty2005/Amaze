@@ -145,7 +145,12 @@ export function PatientRecordDetailPage() {
         </div>
         {tests.length > 0 ? (
           <>
-            <div className="table-wrap">
+            <div
+              className="table-wrap"
+              role="region"
+              aria-label="Tests ordered"
+              tabIndex={0}
+            >
               <table className="table">
                 <thead>
                   <tr>
@@ -190,7 +195,12 @@ export function PatientRecordDetailPage() {
 
         {consultation.prescription.length > 0 ? (
           <>
-            <div className="table-wrap">
+            <div
+              className="table-wrap"
+              role="region"
+              aria-label="Prescription"
+              tabIndex={0}
+            >
               <table className="table min-w-[640px]">
                 <thead>
                   <tr>

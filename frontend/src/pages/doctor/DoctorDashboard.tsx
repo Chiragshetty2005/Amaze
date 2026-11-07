@@ -129,7 +129,7 @@ export function DoctorDashboard() {
           <div className="grid sm:grid-cols-[1fr_190px]">
             <div className="flex flex-col gap-4 p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-3">
-                <p className="caption-4 text-ink/60">Next patient</p>
+                <p className="caption-4 text-ink/70">Next patient</p>
                 <StatusChip status={next.status} />
               </div>
 
@@ -141,7 +141,7 @@ export function DoctorDashboard() {
                     {getAge(nextPatient.dob)} years. {nextPatient.gender}.{' '}
                     {nextPatient.phone}
                   </p>
-                  <p className="mt-1 caption-5 text-ink/60">
+                  <p className="mt-1 caption-5 text-ink/70">
                     {next.natureOfVisit}
                   </p>
                 </div>
@@ -175,16 +175,16 @@ export function DoctorDashboard() {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-1 border-t border-dashed border-primary/25 bg-surface/60 p-5 sm:border-l sm:border-t-0">
-              <p className="caption-4 text-ink/60">
+              <p className="caption-4 text-ink/70">
                 {formatWeekday(next.date)}
               </p>
               <p className="heading-2 text-ink">{formatDayNumber(next.date)}</p>
               <p className="title-3 text-ink/70">{formatMonthShort(next.date)}</p>
               <p className="mt-2 flex items-center gap-1 font-mono text-lg font-medium text-ink">
-                <Clock className="h-4 w-4 text-ink/50" aria-hidden="true" />
+                <Clock className="h-4 w-4 text-ink/70" aria-hidden="true" />
                 {formatTime(next.time)}
               </p>
-              <p className="mt-3 caption-5 text-center text-ink/60">
+              <p className="mt-3 caption-5 text-center text-ink/70">
                 Room 4, AmazeCare Clinic
               </p>
             </div>
@@ -208,7 +208,7 @@ export function DoctorDashboard() {
       </dl>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <section className="flex flex-col gap-4 lg:col-span-2">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-2">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="flex flex-col gap-1">
               <h2 className="heading-5 text-ink">
@@ -337,7 +337,7 @@ export function DoctorDashboard() {
           </div>
         </section>
 
-        <aside className="flex flex-col gap-5">
+        <aside className="flex min-w-0 flex-col gap-5">
           <section className="rounded-2xl border border-line bg-surface p-5">
             <div className="flex items-center gap-2">
               <CalendarBlank className="h-5 w-5 text-muted" aria-hidden="true" />

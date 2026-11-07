@@ -68,7 +68,12 @@ export function InvoiceSlip({
           </div>
         </div>
 
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Invoice line items"
+          tabIndex={0}
+        >
           <table className="table min-w-[520px]">
             <thead>
               <tr>

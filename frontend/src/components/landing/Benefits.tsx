@@ -58,7 +58,7 @@ export function Benefits() {
                 loose paper, no searching through email.
               </p>
             </div>
-            <p className="caption-4 text-ink/60">
+            <p className="caption-4 text-ink/70">
               Built for patients who want the details without the chase.
             </p>
           </div>

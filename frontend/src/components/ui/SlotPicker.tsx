@@ -110,7 +110,7 @@ export function SlotPicker({
                   aria-label={`${formatTime(slot)} on ${formatDateLong(date)}`}
                   onClick={() => onTimeChange(slot)}
                   className={cn(
-                    'rounded-lg border px-3 py-2 font-mono text-sm transition-colors duration-300 ease-out-expo',
+                    'rounded-lg border px-2 py-2 font-mono text-xs transition-colors duration-300 ease-out-expo sm:px-3 sm:text-sm',
                     selected
                       ? 'border-primary bg-primary text-white'
                       : 'border-line bg-surface text-ink hover:bg-mint',
@@ -118,7 +118,7 @@ export function SlotPicker({
                       'cursor-not-allowed border-line bg-paper text-muted opacity-50 hover:bg-paper',
                   )}
                 >
-                  {slot}
+                  {formatTime(slot)}
                 </button>
               )
             })}

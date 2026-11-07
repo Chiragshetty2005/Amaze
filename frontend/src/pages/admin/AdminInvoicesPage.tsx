@@ -88,27 +88,27 @@ export function AdminInvoicesPage() {
           <dd className="font-mono text-xl font-medium text-ink">
             {formatCurrency(billed)}
           </dd>
-          <p className="caption-5 text-muted">
+          <dd className="caption-5 text-muted">
             {invoices.length} {pluralize(invoices.length, 'invoice')}
-          </p>
+          </dd>
         </div>
         <div className="flex flex-col gap-1 bg-surface p-4">
           <dt className="caption-5 text-muted">Collected</dt>
           <dd className="font-mono text-xl font-medium text-primary">
             {formatCurrency(collected)}
           </dd>
-          <p className="caption-5 text-muted">
+          <dd className="caption-5 text-muted">
             {paid.length} paid {pluralize(paid.length, 'invoice')}
-          </p>
+          </dd>
         </div>
         <div className="flex flex-col gap-1 bg-surface p-4">
           <dt className="caption-5 text-muted">Outstanding</dt>
-          <dd className="font-mono text-xl font-medium text-coral">
+          <dd className="font-mono text-xl font-medium text-danger">
             {formatCurrency(outstanding)}
           </dd>
-          <p className="caption-5 text-muted">
+          <dd className="caption-5 text-muted">
             {issued.length} awaiting payment
-          </p>
+          </dd>
         </div>
       </dl>
 
@@ -116,7 +116,7 @@ export function AdminInvoicesPage() {
         <SearchInput
           value={query}
           onChange={setQuery}
-          placeholder="Search by invoice, patient, or doctor"
+          placeholder="Search invoice or patient"
           ariaLabel="Search invoices"
           className="sm:max-w-md"
         />
@@ -125,8 +125,9 @@ export function AdminInvoicesPage() {
           onValueChange={(value) =>
             setTab(value as 'all' | 'issued' | 'paid')
           }
+          mode="filter"
         >
-          <TabsList>
+          <TabsList ariaLabel="Filter invoices">
             {(['all', 'issued', 'paid'] as const).map((value) => (
               <TabsTrigger key={value} value={value}>
                 {value === 'all' ? 'All' : value === 'issued' ? 'Issued' : 'Paid'}{' '}
@@ -150,7 +151,12 @@ export function AdminInvoicesPage() {
           }
         />
       ) : (
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Invoices"
+          tabIndex={0}
+        >
           <table className="table min-w-[920px]">
             <thead>
               <tr>
@@ -160,9 +166,7 @@ export function AdminInvoicesPage() {
                 <th scope="col">Issued</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
-                <th scope="col">
-                  <span className="sr-only">Action</span>
-                </th>
+                <th scope="col"><span className="sr-only">Action</span></th>
               </tr>
             </thead>
             <tbody>

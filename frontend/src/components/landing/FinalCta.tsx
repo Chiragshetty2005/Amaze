@@ -17,7 +17,7 @@ export function FinalCta() {
           <Link to="/find-a-doctor" className={buttonStyles()}>
             Book an appointment
           </Link>
-          <p className="caption-2 text-ink/60">
+          <p className="caption-2 text-ink/70">
             11 specialists across 8 departments.
           </p>
         </div>

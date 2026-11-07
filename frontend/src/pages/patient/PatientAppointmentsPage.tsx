@@ -137,7 +137,7 @@ export function PatientAppointmentsPage() {
       />
 
       <Tabs defaultValue="upcoming">
-        <TabsList>
+        <TabsList ariaLabel="Appointment views">
           <TabsTrigger value="upcoming">
             Upcoming{' '}
             <span className="ml-1 caption-5 text-muted">

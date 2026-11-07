@@ -448,19 +448,19 @@ export function AdminDoctorEditorPage() {
                   <p className="heading-5 text-ink">
                     {watchedName || 'New doctor'}
                   </p>
-                  <p className="caption-4 text-ink/60">
+                  <p className="caption-4 text-ink/70">
                     {specialization?.name ?? 'Department not set'}
                   </p>
                 </div>
               </div>
               <div className="mt-4 flex flex-col gap-2 border-t border-primary/15 pt-4">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="caption-5 text-ink/60">Fee</span>
+                  <span className="caption-5 text-ink/70">Fee</span>
                   <span className="font-mono text-sm text-ink">
                     {formatCurrency(Number(watchedFee) || 0)}
                   </span>
                 </div>
-                <p className="caption-5 text-ink/60">
+                <p className="caption-5 text-ink/70">
                   {formatAvailabilitySummary(availability)}
                 </p>
               </div>

@@ -184,7 +184,7 @@ export function PatientDoctorsPage() {
           <SearchInput
             value={query}
             onChange={setQuery}
-            placeholder="Search by name, department, or qualification"
+            placeholder="Search by name or department"
             ariaLabel="Search doctors"
             className="flex-1"
           />

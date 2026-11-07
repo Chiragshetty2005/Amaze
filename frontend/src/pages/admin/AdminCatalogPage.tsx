@@ -204,8 +204,9 @@ export function AdminCatalogPage() {
           setTab(value as 'medicines' | 'tests')
           setQuery('')
         }}
+        mode="filter"
       >
-        <TabsList>
+        <TabsList ariaLabel="Catalog section">
           <TabsTrigger value="medicines">
             Medicines{' '}
             <span className="ml-1 caption-5 text-muted">
@@ -227,7 +228,7 @@ export function AdminCatalogPage() {
           onChange={setQuery}
           placeholder={
             tab === 'medicines'
-              ? 'Search by medicine, form, or strength'
+              ? 'Search medicines'
               : 'Search tests'
           }
           ariaLabel={
@@ -264,7 +265,12 @@ export function AdminCatalogPage() {
           action={!query ? <Button type="button" onClick={openNew}>Add item</Button> : undefined}
         />
       ) : tab === 'medicines' ? (
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Medicines"
+          tabIndex={0}
+        >
           <table className="table min-w-[720px]">
             <thead>
               <tr>
@@ -272,9 +278,7 @@ export function AdminCatalogPage() {
                 <th scope="col">Form</th>
                 <th scope="col">Strength</th>
                 <th scope="col">Prescribed</th>
-                <th scope="col">
-                  <span className="sr-only">Actions</span>
-                </th>
+                <th scope="col"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
@@ -326,16 +330,19 @@ export function AdminCatalogPage() {
           </table>
         </div>
       ) : (
-        <div className="table-wrap">
+        <div
+          className="table-wrap"
+          role="region"
+          aria-label="Tests"
+          tabIndex={0}
+        >
           <table className="table min-w-[640px]">
             <thead>
               <tr>
                 <th scope="col">Test</th>
                 <th scope="col">Price</th>
                 <th scope="col">Ordered</th>
-                <th scope="col">
-                  <span className="sr-only">Actions</span>
-                </th>
+                <th scope="col"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
