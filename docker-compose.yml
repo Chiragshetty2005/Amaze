@@ -63,7 +63,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: "/api"
+        VITE_API_BASE_URL: "/api/v1"
     ports:
       - "3000:80"
     depends_on:

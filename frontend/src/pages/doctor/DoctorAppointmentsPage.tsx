@@ -21,6 +21,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '../../components/ui/Tabs'
+import { apiErrorMessage } from '../../lib/api'
 import { getAge, pluralize } from '../../lib/format'
 import {
   formatDayNumber,
@@ -81,9 +82,13 @@ function AppointmentRow({
                 <Button
                   type="button"
                   size="sm"
-                  onClick={() => {
-                    clinic.confirmAppointment(appointment.id)
-                    toast.success('Appointment confirmed.')
+                  onClick={async () => {
+                    try {
+                      await clinic.confirmAppointment(appointment.id)
+                      toast.success('Appointment confirmed.')
+                    } catch (error) {
+                      toast.error(apiErrorMessage(error))
+                    }
                   }}
                 >
                   Confirm

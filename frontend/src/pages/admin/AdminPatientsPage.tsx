@@ -124,23 +124,34 @@ export function AdminPatientsPage() {
   }
 
   const onSubmit = async (values: PatientValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 350))
-    if (editingPatient) {
-      clinic.updatePatient(editingPatient.id, values)
-      toast.success('Patient record updated.')
-    } else {
-      clinic.addPatient(values)
-      toast.success('Patient registered.')
+    try {
+      if (editingPatient) {
+        await clinic.updatePatient(editingPatient.id, values)
+        toast.success('Patient record updated.')
+      } else {
+        const result = await clinic.addPatient(values)
+        toast.success(
+          result.invitationSent
+            ? 'Patient registered. An account invitation was sent by email.'
+            : 'Patient registered.',
+        )
+      }
+      setEditorOpen(false)
+      setEditingPatient(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    setEditorOpen(false)
-    setEditingPatient(null)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!patientToDelete) return
-    clinic.deletePatient(patientToDelete.id)
-    toast.success(`${patientToDelete.name} was removed.`)
-    setPatientToDelete(null)
+    try {
+      await clinic.deletePatient(patientToDelete.id)
+      toast.success(`${patientToDelete.name} was deactivated.`)
+      setPatientToDelete(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (

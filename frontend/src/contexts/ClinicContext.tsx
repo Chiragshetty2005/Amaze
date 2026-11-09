@@ -8,12 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { useAuth } from './AuthContext'
-import {
-  apiDownload,
-  apiErrorMessage,
-  apiRequest,
-  type ApiUser,
-} from '../lib/api'
+import { apiDownload, apiErrorMessage, apiRequest } from '../lib/api'
 import type {
   Appointment,
   AppointmentStatus,

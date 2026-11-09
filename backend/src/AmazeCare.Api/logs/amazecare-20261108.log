@@ -1,0 +1,309 @@
+[2026-11-08 15:46:06.362 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request starting HTTP/1.1 GET http://localhost:5250/api/v1/Doctors?pageSize=100 - null null
+[2026-11-08 15:46:06.362 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request starting HTTP/1.1 GET http://localhost:5250/api/v1/Specializations - null null
+[2026-11-08 15:46:06.369 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint 'AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api)'
+[2026-11-08 15:46:06.369 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint 'AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api)'
+[2026-11-08 15:46:06.370 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Route matched with {action = "Search", controller = "Doctors"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[AmazeCare.Application.Common.PagedResult`1[AmazeCare.Application.Features.Doctors.DoctorDto]]] Search(AmazeCare.Application.Features.Doctors.DoctorSearchQuery, System.Threading.CancellationToken) on controller AmazeCare.Api.Controllers.DoctorsController (AmazeCare.Api).
+[2026-11-08 15:46:06.370 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Route matched with {action = "List", controller = "Specializations"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IReadOnlyList`1[AmazeCare.Application.Features.Specializations.SpecializationDto]]] List(System.Threading.CancellationToken) on controller AmazeCare.Api.Controllers.SpecializationsController (AmazeCare.Api).
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 10.0.14 initialized 'AppDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:10.0.14' with options: MigrationsAssembly=AmazeCare.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null EngineType=SqlServer 
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 10.0.14 initialized 'AppDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:10.0.14' with options: MigrationsAssembly=AmazeCare.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null EngineType=SqlServer 
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Creating DbConnection.
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Created DbConnection. (0ms).
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Query: Compiling query expression: 
+'DbSet<Specialization>()
+    .AsNoTracking()
+    .Where(item => item.IsActive)
+    .Select(item => new SpecializationDto(
+        item.Id, 
+        item.Name, 
+        item.Description, 
+        item.Doctors
+            .Count(doctor => doctor.User.IsActive)
+    ))
+    .OrderBy(item => item.Name)'
+[2026-11-08 15:46:06.371 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opening connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.372 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opened connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.373 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Executed action AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api) in 3.1826ms
+[2026-11-08 15:46:06.373 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executed endpoint 'AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api)'
+[2026-11-08 15:46:06.373 +05:30 ERR] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/v1/Specializations responded 500 in 3.9231 ms
+System.InvalidOperationException: The LINQ expression 'DbSet<Specialization>()
+    .Where(s => s.IsActive)
+    .OrderBy(s => new SpecializationDto(
+        s.Id, 
+        s.Name, 
+        s.Description, 
+        DbSet<Doctor>()
+            .Where(d => EF.Property<Guid?>(s, "Id") != null && object.Equals(
+                objA: (object)EF.Property<Guid?>(s, "Id"), 
+                objB: (object)EF.Property<Guid?>(d, "SpecializationId")))
+            .Join(
+                inner: DbSet<User>(), 
+                outerKeySelector: d => EF.Property<Guid?>(d, "UserId"), 
+                innerKeySelector: u => EF.Property<Guid?>(u, "Id"), 
+                resultSelector: (o, i) => new TransparentIdentifier<Doctor, User>(
+                    Outer = o, 
+                    Inner = i
+                ))
+            .Count(d => d.Inner.IsActive)
+    ).Name)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at AmazeCare.Application.Features.Specializations.SpecializationService.ListAsync(CancellationToken cancellationToken)
+   at AmazeCare.Api.Controllers.SpecializationsController.List(CancellationToken cancellationToken)
+   at lambda_method2344(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[2026-11-08 15:46:06.375 +05:30 ERR] AmazeCare.Api.Middleware.ExceptionHandlingMiddleware: Unhandled exception for GET /api/v1/Specializations. Trace 0HNPSQHTIJKR6:00000001.
+System.InvalidOperationException: The LINQ expression 'DbSet<Specialization>()
+    .Where(s => s.IsActive)
+    .OrderBy(s => new SpecializationDto(
+        s.Id, 
+        s.Name, 
+        s.Description, 
+        DbSet<Doctor>()
+            .Where(d => EF.Property<Guid?>(s, "Id") != null && object.Equals(
+                objA: (object)EF.Property<Guid?>(s, "Id"), 
+                objB: (object)EF.Property<Guid?>(d, "SpecializationId")))
+            .Join(
+                inner: DbSet<User>(), 
+                outerKeySelector: d => EF.Property<Guid?>(d, "UserId"), 
+                innerKeySelector: u => EF.Property<Guid?>(u, "Id"), 
+                resultSelector: (o, i) => new TransparentIdentifier<Doctor, User>(
+                    Outer = o, 
+                    Inner = i
+                ))
+            .Count(d => d.Inner.IsActive)
+    ).Name)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at AmazeCare.Application.Features.Specializations.SpecializationService.ListAsync(CancellationToken cancellationToken)
+   at AmazeCare.Api.Controllers.SpecializationsController.List(CancellationToken cancellationToken)
+   at lambda_method2344(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at AmazeCare.Api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context)
+[2026-11-08 15:46:06.376 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: 'AppDbContext' disposed.
+[2026-11-08 15:46:06.376 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request finished HTTP/1.1 GET http://localhost:5250/api/v1/Specializations - 500 null application/problem+json 13.8458ms
+[2026-11-08 15:46:06.379 +05:30 INF] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Doctors] AS [d]
+INNER JOIN [Users] AS [u] ON [d].[UserId] = [u].[Id]
+WHERE [u].[IsActive] = CAST(1 AS bit)
+[2026-11-08 15:46:06.380 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.380 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closed connection to database 'AmazeCare' on server 'localhost,1433' (0ms).
+[2026-11-08 15:46:06.379 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request starting HTTP/1.1 GET http://localhost:5250/api/v1/Specializations - null null
+[2026-11-08 15:46:06.380 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opening connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.380 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opened connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.380 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint 'AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api)'
+[2026-11-08 15:46:06.380 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Route matched with {action = "List", controller = "Specializations"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IReadOnlyList`1[AmazeCare.Application.Features.Specializations.SpecializationDto]]] List(System.Threading.CancellationToken) on controller AmazeCare.Api.Controllers.SpecializationsController (AmazeCare.Api).
+[2026-11-08 15:46:06.381 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 10.0.14 initialized 'AppDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:10.0.14' with options: MigrationsAssembly=AmazeCare.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null EngineType=SqlServer 
+[2026-11-08 15:46:06.381 +05:30 DBG] Microsoft.EntityFrameworkCore.Query: Compiling query expression: 
+'DbSet<Specialization>()
+    .AsNoTracking()
+    .Where(item => item.IsActive)
+    .Select(item => new SpecializationDto(
+        item.Id, 
+        item.Name, 
+        item.Description, 
+        item.Doctors
+            .Count(doctor => doctor.User.IsActive)
+    ))
+    .OrderBy(item => item.Name)'
+[2026-11-08 15:46:06.383 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Executed action AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api) in 2.3162ms
+[2026-11-08 15:46:06.383 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executed endpoint 'AmazeCare.Api.Controllers.SpecializationsController.List (AmazeCare.Api)'
+[2026-11-08 15:46:06.383 +05:30 ERR] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/v1/Specializations responded 500 in 2.7721 ms
+System.InvalidOperationException: The LINQ expression 'DbSet<Specialization>()
+    .Where(s => s.IsActive)
+    .OrderBy(s => new SpecializationDto(
+        s.Id, 
+        s.Name, 
+        s.Description, 
+        DbSet<Doctor>()
+            .Where(d => EF.Property<Guid?>(s, "Id") != null && object.Equals(
+                objA: (object)EF.Property<Guid?>(s, "Id"), 
+                objB: (object)EF.Property<Guid?>(d, "SpecializationId")))
+            .Join(
+                inner: DbSet<User>(), 
+                outerKeySelector: d => EF.Property<Guid?>(d, "UserId"), 
+                innerKeySelector: u => EF.Property<Guid?>(u, "Id"), 
+                resultSelector: (o, i) => new TransparentIdentifier<Doctor, User>(
+                    Outer = o, 
+                    Inner = i
+                ))
+            .Count(d => d.Inner.IsActive)
+    ).Name)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at AmazeCare.Application.Features.Specializations.SpecializationService.ListAsync(CancellationToken cancellationToken)
+   at AmazeCare.Api.Controllers.SpecializationsController.List(CancellationToken cancellationToken)
+   at lambda_method2344(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[2026-11-08 15:46:06.384 +05:30 INF] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (3ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [s0].[Id], [s0].[Bio], [s0].[CreatedAtUtc], [s0].[Designation], [s0].[ExperienceYears], [s0].[Fee], [s0].[Qualification], [s0].[Room], [s0].[SpecializationId], [s0].[UserId], [s0].[Id0], [s0].[CreatedAtUtc0], [s0].[Email], [s0].[FullName], [s0].[IsActive], [s0].[LastLoginAtUtc], [s0].[PasswordHash], [s0].[Phone], [s0].[PhotoUrl], [s0].[Role], [s].[Id], [s].[CreatedAtUtc], [s].[Description], [s].[IsActive], [s].[Name], [d0].[Id], [d0].[Day], [d0].[DoctorId], [d0].[EndTime], [d0].[SlotMinutes], [d0].[StartTime]
+FROM (
+    SELECT [d].[Id], [d].[Bio], [d].[CreatedAtUtc], [d].[Designation], [d].[ExperienceYears], [d].[Fee], [d].[Qualification], [d].[Room], [d].[SpecializationId], [d].[UserId], [u].[Id] AS [Id0], [u].[CreatedAtUtc] AS [CreatedAtUtc0], [u].[Email], [u].[FullName], [u].[IsActive], [u].[LastLoginAtUtc], [u].[PasswordHash], [u].[Phone], [u].[PhotoUrl], [u].[Role]
+    FROM [Doctors] AS [d]
+    INNER JOIN [Users] AS [u] ON [d].[UserId] = [u].[Id]
+    WHERE [u].[IsActive] = CAST(1 AS bit)
+    ORDER BY [u].[FullName]
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [s0]
+INNER JOIN [Specializations] AS [s] ON [s0].[SpecializationId] = [s].[Id]
+LEFT JOIN [DoctorAvailability] AS [d0] ON [s0].[Id] = [d0].[DoctorId]
+ORDER BY [s0].[FullName], [s0].[Id], [s0].[Id0], [s].[Id]
+[2026-11-08 15:46:06.384 +05:30 ERR] AmazeCare.Api.Middleware.ExceptionHandlingMiddleware: Unhandled exception for GET /api/v1/Specializations. Trace 0HNPSQHTIJKR8:00000001.
+System.InvalidOperationException: The LINQ expression 'DbSet<Specialization>()
+    .Where(s => s.IsActive)
+    .OrderBy(s => new SpecializationDto(
+        s.Id, 
+        s.Name, 
+        s.Description, 
+        DbSet<Doctor>()
+            .Where(d => EF.Property<Guid?>(s, "Id") != null && object.Equals(
+                objA: (object)EF.Property<Guid?>(s, "Id"), 
+                objB: (object)EF.Property<Guid?>(d, "SpecializationId")))
+            .Join(
+                inner: DbSet<User>(), 
+                outerKeySelector: d => EF.Property<Guid?>(d, "UserId"), 
+                innerKeySelector: u => EF.Property<Guid?>(u, "Id"), 
+                resultSelector: (o, i) => new TransparentIdentifier<Doctor, User>(
+                    Outer = o, 
+                    Inner = i
+                ))
+            .Count(d => d.Inner.IsActive)
+    ).Name)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at AmazeCare.Application.Features.Specializations.SpecializationService.ListAsync(CancellationToken cancellationToken)
+   at AmazeCare.Api.Controllers.SpecializationsController.List(CancellationToken cancellationToken)
+   at lambda_method2344(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at AmazeCare.Api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context)
+[2026-11-08 15:46:06.385 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: 'AppDbContext' disposed.
+[2026-11-08 15:46:06.385 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request finished HTTP/1.1 GET http://localhost:5250/api/v1/Specializations - 500 null application/problem+json 5.7959ms
+[2026-11-08 15:46:06.386 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.386 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closed connection to database 'AmazeCare' on server 'localhost,1433' (0ms).
+[2026-11-08 15:46:06.386 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor: Executing OkObjectResult, writing value of type 'AmazeCare.Application.Common.PagedResult`1[[AmazeCare.Application.Features.Doctors.DoctorDto, AmazeCare.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2026-11-08 15:46:06.386 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Executed action AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api) in 16.4641ms
+[2026-11-08 15:46:06.386 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executed endpoint 'AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api)'
+[2026-11-08 15:46:06.386 +05:30 INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/v1/Doctors responded 200 in 16.8907 ms
+[2026-11-08 15:46:06.386 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: 'AppDbContext' disposed.
+[2026-11-08 15:46:06.386 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Disposing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.386 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Disposed connection to database '' on server '' (0ms).
+[2026-11-08 15:46:06.386 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request finished HTTP/1.1 GET http://localhost:5250/api/v1/Doctors?pageSize=100 - 200 null application/json; charset=utf-8 24.1518ms
+[2026-11-08 15:46:06.389 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request starting HTTP/1.1 GET http://localhost:5250/api/v1/Doctors?pageSize=100 - null null
+[2026-11-08 15:46:06.389 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executing endpoint 'AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api)'
+[2026-11-08 15:46:06.389 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Route matched with {action = "Search", controller = "Doctors"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[AmazeCare.Application.Common.PagedResult`1[AmazeCare.Application.Features.Doctors.DoctorDto]]] Search(AmazeCare.Application.Features.Doctors.DoctorSearchQuery, System.Threading.CancellationToken) on controller AmazeCare.Api.Controllers.DoctorsController (AmazeCare.Api).
+[2026-11-08 15:46:06.390 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 10.0.14 initialized 'AppDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:10.0.14' with options: MigrationsAssembly=AmazeCare.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null EngineType=SqlServer 
+[2026-11-08 15:46:06.391 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Creating DbConnection.
+[2026-11-08 15:46:06.391 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Created DbConnection. (0ms).
+[2026-11-08 15:46:06.391 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opening connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.391 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opened connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.392 +05:30 INF] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Doctors] AS [d]
+INNER JOIN [Users] AS [u] ON [d].[UserId] = [u].[Id]
+WHERE [u].[IsActive] = CAST(1 AS bit)
+[2026-11-08 15:46:06.392 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.392 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closed connection to database 'AmazeCare' on server 'localhost,1433' (0ms).
+[2026-11-08 15:46:06.392 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opening connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.392 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Opened connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.393 +05:30 INF] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@p='?' (DbType = Int32), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [s0].[Id], [s0].[Bio], [s0].[CreatedAtUtc], [s0].[Designation], [s0].[ExperienceYears], [s0].[Fee], [s0].[Qualification], [s0].[Room], [s0].[SpecializationId], [s0].[UserId], [s0].[Id0], [s0].[CreatedAtUtc0], [s0].[Email], [s0].[FullName], [s0].[IsActive], [s0].[LastLoginAtUtc], [s0].[PasswordHash], [s0].[Phone], [s0].[PhotoUrl], [s0].[Role], [s].[Id], [s].[CreatedAtUtc], [s].[Description], [s].[IsActive], [s].[Name], [d0].[Id], [d0].[Day], [d0].[DoctorId], [d0].[EndTime], [d0].[SlotMinutes], [d0].[StartTime]
+FROM (
+    SELECT [d].[Id], [d].[Bio], [d].[CreatedAtUtc], [d].[Designation], [d].[ExperienceYears], [d].[Fee], [d].[Qualification], [d].[Room], [d].[SpecializationId], [d].[UserId], [u].[Id] AS [Id0], [u].[CreatedAtUtc] AS [CreatedAtUtc0], [u].[Email], [u].[FullName], [u].[IsActive], [u].[LastLoginAtUtc], [u].[PasswordHash], [u].[Phone], [u].[PhotoUrl], [u].[Role]
+    FROM [Doctors] AS [d]
+    INNER JOIN [Users] AS [u] ON [d].[UserId] = [u].[Id]
+    WHERE [u].[IsActive] = CAST(1 AS bit)
+    ORDER BY [u].[FullName]
+    OFFSET @p ROWS FETCH NEXT @p1 ROWS ONLY
+) AS [s0]
+INNER JOIN [Specializations] AS [s] ON [s0].[SpecializationId] = [s].[Id]
+LEFT JOIN [DoctorAvailability] AS [d0] ON [s0].[Id] = [d0].[DoctorId]
+ORDER BY [s0].[FullName], [s0].[Id], [s0].[Id0], [s].[Id]
+[2026-11-08 15:46:06.395 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.395 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Closed connection to database 'AmazeCare' on server 'localhost,1433' (0ms).
+[2026-11-08 15:46:06.395 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor: Executing OkObjectResult, writing value of type 'AmazeCare.Application.Common.PagedResult`1[[AmazeCare.Application.Features.Doctors.DoctorDto, AmazeCare.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[2026-11-08 15:46:06.395 +05:30 INF] Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker: Executed action AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api) in 5.9333ms
+[2026-11-08 15:46:06.395 +05:30 INF] Microsoft.AspNetCore.Routing.EndpointMiddleware: Executed endpoint 'AmazeCare.Api.Controllers.DoctorsController.Search (AmazeCare.Api)'
+[2026-11-08 15:46:06.396 +05:30 INF] Serilog.AspNetCore.RequestLoggingMiddleware: HTTP GET /api/v1/Doctors responded 200 in 6.2400 ms
+[2026-11-08 15:46:06.396 +05:30 DBG] Microsoft.EntityFrameworkCore.Infrastructure: 'AppDbContext' disposed.
+[2026-11-08 15:46:06.396 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Disposing connection to database 'AmazeCare' on server 'localhost,1433'.
+[2026-11-08 15:46:06.396 +05:30 DBG] Microsoft.EntityFrameworkCore.Database.Connection: Disposed connection to database '' on server '' (0ms).
+[2026-11-08 15:46:06.396 +05:30 INF] Microsoft.AspNetCore.Hosting.Diagnostics: Request finished HTTP/1.1 GET http://localhost:5250/api/v1/Doctors?pageSize=100 - 200 null application/json; charset=utf-8 6.701ms
+[2026-11-08 15:46:19.413 +05:30 INF] Microsoft.Hosting.Lifetime: Application is shutting down...
+[2026-11-08 15:46:19.415 +05:30 DBG] Microsoft.Extensions.Hosting.Internal.Host: Hosting stopping
+[2026-11-08 15:46:19.437 +05:30 DBG] Microsoft.Extensions.Hosting.Internal.Host: Hosting stopped

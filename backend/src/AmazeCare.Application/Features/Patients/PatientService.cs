@@ -127,8 +127,13 @@ public sealed class PatientService(
         });
 
         await db.SaveChangesAsync(cancellationToken);
-        await notifications.SendInvitationAsync(user, "patient", rawInviteToken, cancellationToken);
-        return new PatientCreatedResponse(patient.ToPatientDto(), true);
+        var invitationSent = await notifications.SendInvitationAsync(
+            user,
+            "patient",
+            rawInviteToken,
+            cancellationToken);
+
+        return new PatientCreatedResponse(patient.ToPatientDto(), invitationSent);
     }
 
     public async Task<PatientDto> UpdateAsync(
@@ -187,9 +192,6 @@ public sealed class PatientService(
             .Include(item => item.Appointments)
                 .ThenInclude(item => item.Doctor)
                     .ThenInclude(item => item.Specialization)
-            .Include(item => item.Appointments)
-                .ThenInclude(item => item.Patient)
-                    .ThenInclude(item => item.User)
             .FirstOrDefaultAsync(item => item.Id == id && item.User.IsActive, cancellationToken)
             ?? throw new NotFoundAppException("Patient not found.");
 

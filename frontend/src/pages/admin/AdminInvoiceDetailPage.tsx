@@ -1,5 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, Printer, Receipt } from '@phosphor-icons/react'
+import {
+  ArrowLeft,
+  CheckCircle,
+  DownloadSimple,
+  EnvelopeSimple,
+  Printer,
+  Receipt,
+} from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { useClinic } from '../../contexts/ClinicContext'
 import { useDocumentMeta } from '../../hooks/useDocumentMeta'
@@ -8,6 +15,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { InvoiceStatusChip } from '../../components/ui/StatusChip'
 import { Button, buttonStyles } from '../../components/ui/Button'
 import { InvoiceSlip } from '../../components/app/InvoiceSlip'
+import { apiErrorMessage } from '../../lib/api'
 import { formatDateShort } from '../../lib/date'
 
 export function AdminInvoiceDetailPage() {
@@ -43,6 +51,32 @@ export function AdminInvoiceDetailPage() {
     )
   }
 
+  const markPaid = async () => {
+    try {
+      await clinic.markInvoicePaid(invoice.id)
+      toast.success('Invoice marked as paid.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
+  }
+
+  const downloadPdf = async () => {
+    try {
+      await clinic.downloadInvoicePdf(invoice.id, invoice.invoiceNumber)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
+  }
+
+  const emailInvoice = async () => {
+    try {
+      const message = await clinic.emailInvoice(invoice.id)
+      toast.success(message || 'Invoice emailed to the patient.')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -55,14 +89,7 @@ export function AdminInvoiceDetailPage() {
         </Link>
         <div className="flex flex-wrap items-center gap-2">
           {invoice.status === 'issued' ? (
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => {
-                clinic.markInvoicePaid(invoice.id)
-                toast.success('Invoice marked as paid.')
-              }}
-            >
+            <Button type="button" size="sm" onClick={() => void markPaid()}>
               <CheckCircle className="h-4 w-4" aria-hidden="true" />
               Mark as paid
             </Button>
@@ -71,10 +98,28 @@ export function AdminInvoiceDetailPage() {
             type="button"
             variant="secondary"
             size="sm"
+            onClick={() => void downloadPdf()}
+          >
+            <DownloadSimple className="h-4 w-4" aria-hidden="true" />
+            Download PDF
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => void emailInvoice()}
+          >
+            <EnvelopeSimple className="h-4 w-4" aria-hidden="true" />
+            Email invoice
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
             onClick={() => window.print()}
           >
             <Printer className="h-4 w-4" aria-hidden="true" />
-            Print or save as PDF
+            Print
           </Button>
         </div>
       </div>

@@ -8,7 +8,7 @@ public interface INotificationService
 {
     Task SendWelcomeAsync(User user, CancellationToken cancellationToken = default);
     Task SendPasswordResetAsync(User user, string rawToken, CancellationToken cancellationToken = default);
-    Task SendInvitationAsync(User user, string roleLabel, string rawToken, CancellationToken cancellationToken = default);
+    Task<bool> SendInvitationAsync(User user, string roleLabel, string rawToken, CancellationToken cancellationToken = default);
     Task SendAppointmentReceivedAsync(Appointment appointment, CancellationToken cancellationToken = default);
     Task SendAppointmentConfirmedAsync(Appointment appointment, CancellationToken cancellationToken = default);
     Task SendAppointmentRejectedAsync(Appointment appointment, string reason, CancellationToken cancellationToken = default);
@@ -44,7 +44,7 @@ public sealed class NotificationService(
             "password reset",
             cancellationToken);
 
-    public Task SendInvitationAsync(
+    public Task<bool> SendInvitationAsync(
         User user,
         string roleLabel,
         string rawToken,
@@ -131,7 +131,7 @@ public sealed class NotificationService(
             cancellationToken,
             [new EmailAttachment($"{invoice.InvoiceNumber}.pdf", "application/pdf", pdf)]);
 
-    private async Task TrySendAsync(
+    private async Task<bool> TrySendAsync(
         string to,
         string subject,
         string html,
@@ -141,13 +141,14 @@ public sealed class NotificationService(
     {
         try
         {
-            await emailService.SendAsync(
+            return await emailService.SendAsync(
                 new EmailMessage(to, subject, html, Attachments: attachments),
                 cancellationToken);
         }
         catch (Exception exception)
         {
             logger.LogWarning(exception, "Could not send {Kind} email to {Email}.", kind, to);
+            return false;
         }
     }
 

@@ -11,6 +11,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import { TextAreaField, TextField } from '../../components/ui/Form'
+import { apiErrorMessage } from '../../lib/api'
 import { pluralize } from '../../lib/format'
 import type { Specialization } from '../../types'
 
@@ -70,16 +71,19 @@ export function AdminSpecializationsPage() {
   }
 
   const onSubmit = async (values: SpecializationValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 300))
-    if (editing) {
-      clinic.updateSpecialization(editing.id, values)
-      toast.success('Department updated.')
-    } else {
-      clinic.addSpecialization(values)
-      toast.success('Department added.')
+    try {
+      if (editing) {
+        await clinic.updateSpecialization(editing.id, values)
+        toast.success('Department updated.')
+      } else {
+        await clinic.addSpecialization(values)
+        toast.success('Department added.')
+      }
+      setEditorOpen(false)
+      setEditing(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    setEditorOpen(false)
-    setEditing(null)
   }
 
   const linkedDoctors = toDelete
@@ -88,11 +92,15 @@ export function AdminSpecializationsPage() {
       )
     : []
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!toDelete || linkedDoctors.length > 0) return
-    clinic.deleteSpecialization(toDelete.id)
-    toast.success(`${toDelete.name} was removed.`)
-    setToDelete(null)
+    try {
+      await clinic.deleteSpecialization(toDelete.id)
+      toast.success(`${toDelete.name} was removed.`)
+      setToDelete(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   const specializations = clinic.state.specializations

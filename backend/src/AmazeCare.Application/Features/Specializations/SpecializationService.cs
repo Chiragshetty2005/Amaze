@@ -11,15 +11,19 @@ public sealed class SpecializationService(IAppDbContext db, TimeProvider timePro
         var specializations = await db.Specializations
             .AsNoTracking()
             .Where(item => item.IsActive)
+            .Select(item => new { item.Id, item.Name, item.Description })
+            .OrderBy(item => item.Name)
+            .ToListAsync(cancellationToken);
+
+        var doctorCounts = await ActiveDoctorCountsAsync(cancellationToken);
+
+        return specializations
             .Select(item => new SpecializationDto(
                 item.Id,
                 item.Name,
                 item.Description,
-                item.Doctors.Count(doctor => doctor.User.IsActive)))
-            .OrderBy(item => item.Name)
-            .ToListAsync(cancellationToken);
-
-        return specializations;
+                doctorCounts.GetValueOrDefault(item.Id)))
+            .ToList();
     }
 
     public async Task<SpecializationDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -27,16 +31,32 @@ public sealed class SpecializationService(IAppDbContext db, TimeProvider timePro
         var specialization = await db.Specializations
             .AsNoTracking()
             .Where(item => item.Id == id && item.IsActive)
-            .Select(item => new SpecializationDto(
-                item.Id,
-                item.Name,
-                item.Description,
-                item.Doctors.Count(doctor => doctor.User.IsActive)))
+            .Select(item => new { item.Id, item.Name, item.Description })
             .FirstOrDefaultAsync(cancellationToken)
             ?? throw new NotFoundAppException("Department not found.");
 
-        return specialization;
+        var doctorCounts = await ActiveDoctorCountsAsync(cancellationToken);
+
+        return new SpecializationDto(
+            specialization.Id,
+            specialization.Name,
+            specialization.Description,
+            doctorCounts.GetValueOrDefault(specialization.Id));
     }
+
+    private async Task<Dictionary<Guid, int>> ActiveDoctorCountsAsync(
+        CancellationToken cancellationToken) =>
+        await (
+                from doctor in db.Doctors
+                join user in db.Users on doctor.UserId equals user.Id
+                where user.IsActive
+                group doctor by doctor.SpecializationId
+                into grouped
+                select new { SpecializationId = grouped.Key, Count = grouped.Count() })
+            .ToDictionaryAsync(
+                item => item.SpecializationId,
+                item => item.Count,
+                cancellationToken);
 
     public async Task<SpecializationDto> CreateAsync(
         SaveSpecializationRequest request,

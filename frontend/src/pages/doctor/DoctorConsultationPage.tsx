@@ -24,6 +24,7 @@ import { Avatar } from '../../components/ui/Avatar'
 import { EmptyState } from '../../components/ui/EmptyState'
 import { Button, buttonStyles } from '../../components/ui/Button'
 import { TextAreaField } from '../../components/ui/Form'
+import { apiErrorMessage } from '../../lib/api'
 import { getAge, getDosageLabel, formatCurrency } from '../../lib/format'
 import {
   formatDateLong,
@@ -170,9 +171,15 @@ export function DoctorConsultationPage() {
           <div className="flex flex-wrap gap-2">
             <Button
               type="button"
-              onClick={() => {
-                clinic.confirmAppointment(appointment.id)
-                toast.success('Appointment confirmed. You can start the consultation.')
+              onClick={async () => {
+                try {
+                  await clinic.confirmAppointment(appointment.id)
+                  toast.success(
+                    'Appointment confirmed. You can start the consultation.',
+                  )
+                } catch (error) {
+                  toast.error(apiErrorMessage(error))
+                }
               }}
             >
               Confirm appointment
@@ -251,8 +258,6 @@ export function DoctorConsultationPage() {
       return
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 500))
-
     const prescription = drafts.map((draft) => {
       const medicine = clinic.getMedicine(draft.medicineId)
       return {
@@ -267,19 +272,17 @@ export function DoctorConsultationPage() {
       }
     })
 
-    const result = clinic.completeConsultation(appointment.id, {
-      symptoms: values.symptoms,
-      physicalExam: values.physicalExam,
-      treatmentPlan: values.treatmentPlan,
-      diagnosis: values.diagnosis,
-      testIds: Array.from(selectedTests),
-      prescription,
-    })
-
-    if (!result) {
-      setError('root', {
-        message: 'The consultation could not be saved. Try again.',
+    try {
+      await clinic.completeConsultation(appointment.id, {
+        symptoms: values.symptoms,
+        physicalExam: values.physicalExam,
+        treatmentPlan: values.treatmentPlan,
+        diagnosis: values.diagnosis,
+        testIds: Array.from(selectedTests),
+        prescription,
       })
+    } catch (error) {
+      setError('root', { message: apiErrorMessage(error) })
       return
     }
 

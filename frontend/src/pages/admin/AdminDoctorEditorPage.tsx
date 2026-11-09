@@ -13,6 +13,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Button, buttonStyles } from '../../components/ui/Button'
 import { FileUpload } from '../../components/ui/FileUpload'
 import { TextAreaField, TextField, SelectField } from '../../components/ui/Form'
+import { apiErrorMessage } from '../../lib/api'
 import { formatCurrency } from '../../lib/format'
 import { formatAvailabilitySummary } from '../../lib/availability'
 import type { DoctorAvailability } from '../../types'
@@ -183,7 +184,6 @@ export function AdminDoctorEditorPage() {
       return
     }
     setAvailabilityError('')
-    await new Promise((resolve) => setTimeout(resolve, 400))
 
     const payload = {
       name: values.name.trim(),
@@ -199,14 +199,22 @@ export function AdminDoctorEditorPage() {
       availability: sortedAvailability,
     }
 
-    if (doctor) {
-      clinic.updateDoctor(doctor.id, payload)
-      toast.success('Doctor profile updated.')
-    } else {
-      clinic.addDoctor(payload)
-      toast.success('Doctor added to the clinic.')
+    try {
+      if (doctor) {
+        await clinic.updateDoctor(doctor.id, payload)
+        toast.success('Doctor profile updated.')
+      } else {
+        const result = await clinic.addDoctor(payload)
+        toast.success(
+          result.invitationSent
+            ? 'Doctor added. An account invitation was sent by email.'
+            : 'Doctor added to the clinic.',
+        )
+      }
+      navigate('/admin/doctors')
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    navigate('/admin/doctors')
   }
 
   return (

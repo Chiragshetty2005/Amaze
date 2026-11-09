@@ -10,6 +10,7 @@ import { EmptyState } from '../../components/ui/EmptyState'
 import { Avatar } from '../../components/ui/Avatar'
 import { Button, buttonStyles } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
+import { apiErrorMessage } from '../../lib/api'
 import { formatCurrency, pluralize } from '../../lib/format'
 import { formatAvailabilityDays } from '../../lib/availability'
 import type { Doctor } from '../../types'
@@ -46,11 +47,17 @@ export function AdminDoctorsPage() {
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!doctorToDelete) return
-    clinic.deleteDoctor(doctorToDelete.id)
-    toast.success(`${doctorToDelete.name} and their appointments were removed.`)
-    setDoctorToDelete(null)
+    try {
+      await clinic.deleteDoctor(doctorToDelete.id)
+      toast.success(
+        `${doctorToDelete.name} was deactivated and future appointments were cancelled.`,
+      )
+      setDoctorToDelete(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
+    }
   }
 
   return (

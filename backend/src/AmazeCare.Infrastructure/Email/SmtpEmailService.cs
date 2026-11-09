@@ -13,7 +13,7 @@ public sealed class SmtpEmailService(
 {
     private readonly EmailOptions _options = options.Value;
 
-    public async Task SendAsync(EmailMessage message, CancellationToken cancellationToken = default)
+    public async Task<bool> SendAsync(EmailMessage message, CancellationToken cancellationToken = default)
     {
         if (!_options.Enabled || string.IsNullOrWhiteSpace(_options.Host))
         {
@@ -21,7 +21,7 @@ public sealed class SmtpEmailService(
                 "SMTP is disabled. Skipped email \"{Subject}\" to {Recipient}.",
                 message.Subject,
                 message.To);
-            return;
+            return false;
         }
 
         var mime = new MimeMessage();
@@ -67,6 +67,7 @@ public sealed class SmtpEmailService(
             "Sent email \"{Subject}\" to {Recipient}.",
             message.Subject,
             message.To);
+        return true;
     }
 
     private static string StripHtml(string html)

@@ -13,6 +13,7 @@ import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import { SelectField, TextField } from '../../components/ui/Form'
 import { Tabs, TabsList, TabsTrigger } from '../../components/ui/Tabs'
+import { apiErrorMessage } from '../../lib/api'
 import { formatCurrency, pluralize } from '../../lib/format'
 import type { MedicalTest, Medicine } from '../../types'
 
@@ -141,46 +142,56 @@ export function AdminCatalogPage() {
   }
 
   const onSaveMedicine = async (values: MedicineValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 250))
-    if (editingMedicine) {
-      clinic.updateMedicine(editingMedicine.id, values)
-      toast.success('Medicine updated.')
-    } else {
-      clinic.addMedicine(values)
-      toast.success('Medicine added.')
+    try {
+      if (editingMedicine) {
+        await clinic.updateMedicine(editingMedicine.id, values)
+        toast.success('Medicine updated.')
+      } else {
+        await clinic.addMedicine(values)
+        toast.success('Medicine added.')
+      }
+      setMedicineEditorOpen(false)
+      setEditingMedicine(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    setMedicineEditorOpen(false)
-    setEditingMedicine(null)
   }
 
   const onSaveTest = async (values: TestValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 250))
-    if (editingTest) {
-      clinic.updateTest(editingTest.id, {
-        name: values.name.trim(),
-        price: Number(values.price),
-      })
-      toast.success('Test updated.')
-    } else {
-      clinic.addTest({
-        name: values.name.trim(),
-        price: Number(values.price),
-      })
-      toast.success('Test added.')
+    try {
+      if (editingTest) {
+        await clinic.updateTest(editingTest.id, {
+          name: values.name.trim(),
+          price: Number(values.price),
+        })
+        toast.success('Test updated.')
+      } else {
+        await clinic.addTest({
+          name: values.name.trim(),
+          price: Number(values.price),
+        })
+        toast.success('Test added.')
+      }
+      setTestEditorOpen(false)
+      setEditingTest(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    setTestEditorOpen(false)
-    setEditingTest(null)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteTarget) return
-    if (deleteTarget.kind === 'medicine') {
-      clinic.deleteMedicine(deleteTarget.id)
-    } else {
-      clinic.deleteTest(deleteTarget.id)
+    try {
+      if (deleteTarget.kind === 'medicine') {
+        await clinic.deleteMedicine(deleteTarget.id)
+      } else {
+        await clinic.deleteTest(deleteTarget.id)
+      }
+      toast.success(`${deleteTarget.name} was deactivated in the catalog.`)
+      setDeleteTarget(null)
+    } catch (error) {
+      toast.error(apiErrorMessage(error))
     }
-    toast.success(`${deleteTarget.name} was removed from the catalog.`)
-    setDeleteTarget(null)
   }
 
   const list = tab === 'medicines' ? medicines : tests

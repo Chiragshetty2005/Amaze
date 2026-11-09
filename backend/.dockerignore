@@ -1,11 +1,11 @@
-bin/
-obj/
-logs/
+**/bin/
+**/obj/
+**/logs/
 *.user
 *.suo
-.vs/
-TestResults/
-coverage/
+**/.vs/
+**/TestResults/
+**/coverage/
 *.db
 *.db-shm
 *.db-wal
